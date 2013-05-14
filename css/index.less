@@ -23,3 +23,21 @@ body{
 	top:0;
 	left:0;
 }
+
+.mood_bar{
+	display: inline-block;
+	margin: 10px;
+	height: 100px;
+	width: 100px;
+	line-height: 100px;
+	text-align: center;
+	padding: 10px;
+	.rounded(10px);
+	border: 1px solid #ddd;
+	cursor: pointer;
+	.transition(0.2s);
+	opacity: 0.8;
+	&:hover{
+		opacity: 1.0;
+	};
+}

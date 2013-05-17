@@ -16,6 +16,7 @@ var is_owner = false; // who ever created the room will be the owner for the cur
 var is_player_one = false;
 var is_player_two = false;
 var ui_presented = false; // if ui doe not present ,it means the room is already used, prompts the user to creat a new room
+var ytplayer; // youtube player
 
 // patch handlebars to enable object loops
 Handlebars.registerHelper('each_obj', function(context, options) {

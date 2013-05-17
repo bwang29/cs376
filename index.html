@@ -2,6 +2,7 @@
 <head>
   <link href='http://fonts.googleapis.com/css?family=Titillium+ Web|Noto+Sans|Noto+Serif|Roboto+Condensed' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet/less" type="text/css" href="css/index.less" />
+  <script src="https://cdn.firebase.com/v0/firebase.js"></script>
   <script src="js/jquery-1.9.0.min.js"></script>
   <script src="js/color-0.4.1.min.js"></script>
   <script src="js/less-1.3.3.min.js"></script>
@@ -14,11 +15,53 @@
 
 </head>
 <body>
-
-<!-- <iframe id="ytplayer" type="text/html" width="640" height="360"
-src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1&version=3&playerapiid=ytplayer"
-frameborder="0" allowfullscreen> -->
 <div id="ytapiplayer">
 </div>
+<script id="handlebar_color_grid" type="text/x-handlebars-template">
+    <div id="color_grid">
+      {{#each colors}}
+        <div class='color_grid_item' style="background: {{this}}"></div>
+      {{/each}}
+    </div>
+</script>
+<script id="handlebar_hive" type="text/x-handlebars-template">
+    <div class='hives'>
+      {{#each_obj hives}}
+            <div data-color="{{key}}" class='hive' style="background:{{key}}">
+              {{#each value}}
+                <div class='mood'>{{this}}</div>
+              {{/each}}
+            </div>
+      {{/each_obj}}
+    </ul>
+</script>
+<div class="btn" id="new_room">Go home</div>
+<div id="caption"></div>
+<div id="color_board">
+  <div id="board_left">
+  </div>
+  <div id="board_right">
+  </div>
+</div>
+<div id="stage">
+  <div id="stage_left">
+    <div class="player_name">Waiting for player.</div>
+  </div>
+  <div id="stage_right">
+    <div class="player_name">Waiting for player.</div>
+  </div>
+</div>
+<div class="prompt" id="player_two_prompt">
+    player two, what's your name
+    <input id="player_two_name" /><br/>
+    <div class="btn" id="player_two_join">Join this room</div>
+</div>
+<div class="prompt" id="player_one_waiting">
+    Waiting player two to join..
+</div>
+<div id="bottom">
+  About the game 
+</div>
+
 </body>
 </html>

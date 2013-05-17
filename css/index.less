@@ -24,12 +24,16 @@ body{
 	left:0;
 }
 
-.mood_bar{
+.hives{
+	width:960px;
+	margin: 0 auto;
+}
+.hive{
 	display: inline-block;
-	margin: 10px;
-	height: 100px;
-	width: 100px;
-	line-height: 100px;
+	margin: 5px;
+	height: 150px;
+	width: 150px;
+	line-height: 150px;
 	text-align: center;
 	padding: 10px;
 	.rounded(10px);
@@ -41,3 +45,103 @@ body{
 		opacity: 1.0;
 	};
 }
+
+.mood{
+	display: none;
+}
+
+#caption{
+	color: #292929;
+	padding: 20px 0;
+	width:960px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.color_grid_item{
+	width: 40px;
+	height: 40px;
+	.rounded(5px);
+	padding: 10px;
+	display: inline-block;
+	.box-sizing();
+	.drop-shadow(1px,2px,2px,0.2);
+	cursor: pointer;
+	&:hover{
+		border: 3px solid #FFF;
+	};
+}
+
+#color_grid{
+	padding: 20px;
+	width: 44px * 7;
+	margin: 0 auto;
+}
+
+#color_board{
+	width: 960px;
+	margin: 0 auto;
+	border: 1px solid #333;
+	position: relative;
+	#board_left{
+		width: 50%;
+		display: inline-block;
+		.box-sizing;
+	}
+	#board_right{
+		width: 49%;
+		display: inline-block;
+		.box-sizing;
+	}
+}
+
+#stage{
+	width: 960px;
+	margin:0 auto;
+	position: relative;
+	#stage_left{
+		width:50%;
+		display: inline-block;
+		.box-sizing;
+		border-right:1px solid #333;
+	}
+	#stage_right{
+		width:49%;
+		display: inline-block;
+		.box-sizing;
+	}
+}
+
+#bottom{
+	width: 960px;
+	margin:0 auto;
+	text-align: center;
+}
+
+.btn{
+	padding: 5px 12px;
+	background: #333;
+	.transition(0.1s);
+	.rounded(20px);
+	color: white;
+	display: inline-block;
+	cursor: pointer;
+	border: 3px solid black;
+	&:hover{
+		background: #fff;
+		color: black;
+		border: 3px solid black;
+	};
+}
+
+.prompt{
+	display: none;
+	position: absolute;
+	top:30px;
+	width: 400px;
+	left:50%;
+	margin-left: -200px;
+	background: #efefef;
+	padding: 20px;
+}
+

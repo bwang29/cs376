@@ -1,7 +1,15 @@
 $(document).ready(ui_init);
 
+var root_url = "https://musicflow.firebaseio.com/";
+
+Handlebars.registerHelper('each_obj', function(context, options) {
+  var ret = "";
+  for(var prop in context){ ret = ret + options.fn({key:prop,value:context[prop]});}
+  return ret;
+});
+
 function ui_init(){
-	schedule(site);
+	//schedule(site);
 	schedule(page);
 }
 
@@ -37,6 +45,19 @@ function getURLParameter(name) {
         (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
     );
 }
+
+function save_content_to_local(name,object){
+	if(localStorage){
+		localStorage.setItem(name,JSON.stringify(object)); 
+	}
+}
+
+function get_content_from_local(name){
+	if(localStorage){
+		return JSON.parse(localStorage.getItem(name));
+	}
+}
+
 
 
 // for data analytics (mining echonest)

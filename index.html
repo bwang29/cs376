@@ -20,7 +20,7 @@
 <script id="handlebar_color_grid" type="text/x-handlebars-template">
     <div id="color_grid">
       {{#each colors}}
-        <div class='color_grid_item' style="background: {{this}}"></div>
+        <div class='color_grid_item' data-color="{{this}}" style="background:{{this}}"></div>
       {{/each}}
     </div>
 </script>
@@ -35,34 +35,37 @@
       {{/each_obj}}
     </ul>
 </script>
-<div class="btn" id="new_room">Go home</div>
+<div class="btn" id="new_room">Start a new room</div>
+<div id="songs_sequence"></div>
 <div id="caption"></div>
 <div id="color_board">
   <div id="board_left">
-    Waiting for player one to choose color.
+    <div id="board_left_cover" class="board_cover"></div>
+    <div id="board_left_status"></div>
   </div>
   <div id="board_right">
-    Waiting for player one to choose color.
+    <div id="board_right_cover" class="board_cover"></div>
+    <div id="board_right_status"></div>
   </div>
 </div>
 <div id="stage">
   <div id="stage_left">
-    <div class="player_name">Waiting for player.</div>
+    <div class="player_name">Waiting for player one.</div>
   </div>
   <div id="stage_right">
-    <div class="player_name">Waiting for player.</div>
+    <div class="player_name">Waiting for player two.</div>
   </div>
 </div>
 <div class="prompt" id="player_two_prompt">
-    player two, what's your name
+    Enter your name to start the game.
     <input id="player_two_name" /><br/>
-    <div class="btn" id="player_two_join">Join this room</div>
+    <div class="btn" id="player_two_join">Join room</div>
 </div>
 <div class="prompt" id="player_one_waiting">
-    Waiting player two to join..
+    Waiting the other player to join. Please send this URL to your partner.
 </div>
 <div id="bottom">
-  About the game 
+  
 </div>
 
 </body>

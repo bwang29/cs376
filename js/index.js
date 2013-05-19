@@ -17,6 +17,9 @@ var is_player_one = false;
 var is_player_two = false;
 var ui_presented = false; // if ui doe not present ,it means the room is already used, prompts the user to creat a new room
 var ytplayer; // youtube player
+var current_song_attempt_t = "";
+var current_song_attempt_a = "";
+var total_songs_to_play = 5;
 
 // patch handlebars to enable object loops
 Handlebars.registerHelper('each_obj', function(context, options) {
@@ -46,10 +49,23 @@ $(function(){
 	}
 	// connect to data stream
 	data_current_stream = new Firebase(root_url+'rooms/'+room_id);
+	data_current_stream.onDisconnect().update({disconnected:true});
 	data_current_stream.on('value',function(snapshot){
 		var d = snapshot.val();
 		$("#stage_left .player_name").text(d.player_one_name);
+		$("#stage_right .player_name").text(d.player_two_name);
 		// if player two does not exist and user is not owner
+
+		if(d.disconnected == true){
+			if(is_player_one){
+				$("#board_right_status").html("player two disconnected");
+			}else{
+				$("#board_left_status").html("player one disconnected");
+			}
+			ytplayer.stopVideo(); // stop video from playing
+			return;
+		}
+
 		if(!d.player_two_name){
 			if(is_owner == false){
 				st("Player two is ready. UI built for player one",0);
@@ -59,19 +75,81 @@ $(function(){
 				attach_player_two();
 			}
 		}else{
+			$("#player_one_waiting").fadeOut();
+			$("#player_two_prompt").fadeOut();
 			// if player enter the room later, ui won't show up so they can't interact
 			if(!ui_presented){
 				st("the room has been used before.",-1);
 				$("#caption").html("The room has already been used. Please create a new room.");
 			}
-			// player 1 will lose ownership of the room when opening the url again
-			st("both player lose ownership of room",0);
-			save_content_to_local("musicflow",{has_control_room_id:room_id});
-			$("#stage_right .player_name").text(d.player_two_name);
-			$("#player_one_waiting").fadeOut();
-			$("#player_two_prompt").fadeOut();
-			// player two will start the game passively, the owner (player one) starts the game as a trigger
-			if(is_owner) start_game();
+			if(is_owner && !d.game_started){
+				// player 1 will lose ownership of the room when opening the url again
+				st("both player lose ownership of room",0);
+				save_content_to_local("musicflow",{has_control_room_id:room_id});
+				// player two will start the game passively, the owner (player one) starts the game as a trigger, 
+				st("both player ready, starting game..",0);
+				data_current_stream.update({game_started:true,game_round:1});
+				$("#songs_sequence").html("song 1/"+total_songs_to_play);
+				start_new_song();
+			}
+		}
+
+		// song id changed , tell player two to start playing music
+		if(d.game_started && is_player_two && (d.current_song_id != current_song_id)){
+			if(typeof d.current_song_id === "undefined") return;
+			st("song id changed, previous: "+ current_song_id + " new " + d.current_song_id,0);
+			current_song_id = d.current_song_id;
+			current_song_actual = d.current_song_actual;
+			// this will both affect player 1 and player 2
+			st("play new video for a new round",0);
+			$(".board_cover").hide();
+			play_video(current_song_id);
+		}
+
+		if(typeof d.player_one_color !== "undefined" && d.player_one_color !==""){
+			if(is_player_two) $("#board_left_status").html("player one finished choosing color");
+		}else{
+			$("#board_left_status").html("player one is still choosing color..");
+		}
+
+		if(typeof d.player_two_color !== "undefined" && d.player_two_color !==""){
+			if(is_player_one) $("#board_right_status").html("player two finished choosing color");
+		}else{
+			$("#board_right_status").html("player two is still choosing color..");
+		}
+
+		// only player one has control to start a new song
+		if(d.game_started && is_player_one && typeof d.player_one_color !== "undefined" && d.player_one_color !== "" && typeof d.player_two_color !== "undefined" && d.player_two_color !==""){
+			
+			var u = {
+				game_round : d.game_round + 1,
+				player_one_color: "", // must set this to avoid infinite call back
+				player_two_color: ""
+			};
+			
+			// stop game once rounds reached
+			if(u.game_round > total_songs_to_play){
+				console.log(d);
+				st("game ended",0);
+				ytplayer.stopVideo(); // stop video from playing
+				return;
+			}
+
+			// upload song sequence ui
+			$("#songs_sequence").html("song "+u.game_round+"/"+total_songs_to_play);
+
+			st("both player color selected",0);
+			
+			u[d.game_round]={
+						1:d.player_one_color,
+						2:d.player_two_color,
+						a:current_song_attempt_a,
+						t:current_song_attempt_t,
+						m:current_mood_energy
+			};
+			data_current_stream.update(u);
+			$(".board_cover").hide();
+			start_new_song();
 		}
 	});
 });
@@ -97,17 +175,17 @@ function gen_color_grid(){
 }
 
 function page(){
-	var hive_template = make_template("handlebar_hive");
-	var hive_html = hive_template({hives:color_mapping});
+	//var hive_template = make_template("handlebar_hive");
+	//var hive_html = hive_template({hives:color_mapping});
 	//$("body").append(hive_html);
-	schedule(function(){
-		$(".hive").click(function(){
-			if(player_state == -1) return; // loading
-			var s_color = $(this).data('color');
-			st("selected color: "+ s_color,0);
-			play_mood_energy(color_mapping[s_color][getRandomInt(0,color_mapping[s_color].length-1)],0.5);
-		});
-	});
+	// schedule(function(){
+	// 	$(".hive").click(function(){
+	// 		if(player_state == -1) return; // loading
+	// 		var s_color = $(this).data('color');
+	// 		st("selected color: "+ s_color,0);
+	// 		play_mood_energy(color_mapping[s_color][getRandomInt(0,color_mapping[s_color].length-1)],0.5);
+	// 	});
+	// });
 }
 
 function gen_grid_ui(){
@@ -116,21 +194,30 @@ function gen_grid_ui(){
 	var color_grid_template = make_template("handlebar_color_grid");
 	var color_grid__html = color_grid_template({colors:color_grid});
 	if(is_player_two){
-		$("#board_right").html(color_grid__html);
+		$("#board_right").append(color_grid__html);
 	}else{
-		$("#board_left").html(color_grid__html);
+		$("#board_left").append(color_grid__html);
 	}
 	schedule(function(){
 		$(".color_grid_item").click(function(){
-			
+			var current_selected_color = $(this).data("color");
+			console.log(current_selected_color);
+			$($(this).parent().parent().find(".board_cover")).css({background:current_selected_color}).show();
+			if(is_player_one){
+				data_current_stream.update({player_one_color:current_selected_color});
+			}else{
+				data_current_stream.update({player_two_color:current_selected_color});
+			}
 		});
 	});
 }
 
-function start_game(){
+// this function touches any database for synchronization, used for player 1
+function start_new_song(){
 	play_mood_energy("happy",0.5);
 }
 
+// this function touches any database for synchronization, used for player 1
 function play_mood_energy(mood,energy){
 	current_mood_energy = {mood:mood,energy:energy};
 	st("select mood/energy: " + mood+"/"+energy,0);
@@ -149,6 +236,8 @@ function play_mood_energy(mood,energy){
 		return;
 	}
 	var song_to_play = mood_songs[energy].songs[getRandomInt(0,energy_length-1)];
+	current_song_attempt_t = song_to_play.t;
+	current_song_attempt_a = song_to_play.a;
 	current_song_attempt = song_to_play.t + " " + song_to_play.a;
 	st("about to play : " + current_song_attempt,0);
 	get_youtube_videos(current_song_attempt);
@@ -178,9 +267,12 @@ function onytplayerStateChange(newState) {
    }
 }
 
+// this function touches any database for synchronization, used for player 1
 function get_youtube_videos(q){
+	st("get youtube video with query : "+q, 0);
 	ws.get(youtube_addkey("https://www.googleapis.com/youtube/v3/search?maxResults=10&order=relevance&part=snippet&q="+q+"&type=video"),function(res){
 		var videos = res.items;
+		console.log(videos);
 		if(typeof videos === "undefined" || videos.length == 0){
 			st("no video found, try again..",1);
 			play_mood_energy(current_mood_energy.mood,current_mood_energy.energy); // try again
@@ -202,6 +294,7 @@ function get_youtube_videos(q){
 	});
 }
 
+// this function does not touch any database for synchronization, used for player 2
 function play_video(id){
 	if(player_initiated == false){
 		swfobject.embedSWF("http://www.youtube.com/v/"+id+"?enablejsapi=1&autoplay=1&playerapiid=ytplayer&version=3","ytapiplayer", "425", "356", "8", null, null, params, atts);

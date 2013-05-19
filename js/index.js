@@ -56,16 +56,6 @@ $(function(){
 		$("#stage_right .player_name").text(d.player_two_name);
 		// if player two does not exist and user is not owner
 
-		if(d.disconnected == true){
-			if(is_player_one){
-				$("#board_right_status").html("player two disconnected");
-			}else{
-				$("#board_left_status").html("player one disconnected");
-			}
-			ytplayer.stopVideo(); // stop video from playing
-			return;
-		}
-
 		if(!d.player_two_name){
 			if(is_owner == false){
 				st("Player two is ready. UI built for player one",0);
@@ -81,6 +71,16 @@ $(function(){
 			if(!ui_presented){
 				st("the room has been used before.",-1);
 				$("#caption").html("The room has already been used. Please create a new room.");
+				return;
+			}
+			if(d.disconnected == true){
+				if(is_player_one){
+					$("#board_right_status").html("player two disconnected");
+				}else{
+					$("#board_left_status").html("player one disconnected");
+				}
+				ytplayer.stopVideo(); // stop video from playing
+				return;
 			}
 			if(is_owner && !d.game_started){
 				// player 1 will lose ownership of the room when opening the url again
@@ -137,9 +137,8 @@ $(function(){
 
 			// stop game once rounds reached
 			if(d.game_round >= total_songs_to_play){
-				console.log(d);
-				st("game ended",0);
 				$("#caption").html("game ended, thanks for participating!");
+				st("game ended",0);
 				ytplayer.stopVideo(); // stop video from playing
 				return;
 			}
@@ -261,8 +260,11 @@ function onytplayerStateChange(newState) {
    	$("#caption").html("playing "+ current_song_actual);
    }else if(newState == 0){
 
-   }else{
+   }else if(newState == -1){
    	$("#caption").html("loading music..")
+   }else if(newState == 5){
+
+   	// don't put any thing here, might affect game ending state
    }
 }
 

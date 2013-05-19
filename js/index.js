@@ -126,20 +126,6 @@ $(function(){
 				player_one_color: "", // must set this to avoid infinite call back
 				player_two_color: ""
 			};
-			
-			// stop game once rounds reached
-			if(u.game_round > total_songs_to_play){
-				console.log(d);
-				st("game ended",0);
-				ytplayer.stopVideo(); // stop video from playing
-				return;
-			}
-
-			// upload song sequence ui
-			$("#songs_sequence").html("song "+u.game_round+"/"+total_songs_to_play);
-
-			st("both player color selected",0);
-			
 			u[d.game_round]={
 						1:d.player_one_color,
 						2:d.player_two_color,
@@ -148,6 +134,19 @@ $(function(){
 						m:current_mood_energy
 			};
 			data_current_stream.update(u);
+
+			// stop game once rounds reached
+			if(d.game_round >= total_songs_to_play){
+				console.log(d);
+				st("game ended",0);
+				$("#caption").html("game ended, thanks for participating!");
+				ytplayer.stopVideo(); // stop video from playing
+				return;
+			}
+
+			// upload song sequence ui
+			$("#songs_sequence").html("song "+u.game_round+"/"+total_songs_to_play);
+			st("both player color selected",0);
 			$(".board_cover").hide();
 			start_new_song();
 		}

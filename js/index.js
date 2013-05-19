@@ -137,7 +137,6 @@ $(function(){
 
 			// stop game once rounds reached
 			if(d.game_round >= total_songs_to_play){
-				$("#caption").html("game ended, thanks for participating!");
 				st("game ended",0);
 				ytplayer.stopVideo(); // stop video from playing
 				return;
@@ -261,9 +260,9 @@ function onytplayerStateChange(newState) {
    }else if(newState == 0){
 
    }else if(newState == -1){
-   	$("#caption").html("loading music..")
+   	$("#caption").html("loading music..");
    }else if(newState == 5){
-
+   	$("#caption").html("game ended");
    	// don't put any thing here, might affect game ending state
    }
 }

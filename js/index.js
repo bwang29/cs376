@@ -19,7 +19,7 @@ var ui_presented = false; // if ui doe not present ,it means the room is already
 var ytplayer; // youtube player
 var current_song_attempt_t = "";
 var current_song_attempt_a = "";
-var total_songs_to_play = 5;
+var total_songs_to_play = 2;
 
 // patch handlebars to enable object loops
 Handlebars.registerHelper('each_obj', function(context, options) {
@@ -55,7 +55,6 @@ $(function(){
 		$("#stage_left .player_name").text(d.player_one_name);
 		$("#stage_right .player_name").text(d.player_two_name);
 		// if player two does not exist and user is not owner
-
 		if(!d.player_two_name){
 			if(is_owner == false){
 				st("Player two is ready. UI built for player one",0);
@@ -73,6 +72,15 @@ $(function(){
 				$("#caption").html("The room has already been used. Please create a new room.");
 				return;
 			}
+			if(typeof d.game_round != "undefined"){
+				if(d.game_round <= total_songs_to_play){
+					$("#songs_sequence").html("song "+d.game_round+"/"+total_songs_to_play);
+				}else{
+					st("game ended",0);
+					ytplayer.stopVideo(); // stop video from playing
+					return;
+				}
+			}
 			if(d.disconnected == true){
 				if(is_player_one){
 					$("#board_right_status").html("player two disconnected");
@@ -89,7 +97,6 @@ $(function(){
 				// player two will start the game passively, the owner (player one) starts the game as a trigger, 
 				st("both player ready, starting game..",0);
 				data_current_stream.update({game_started:true,game_round:1});
-				$("#songs_sequence").html("song 1/"+total_songs_to_play);
 				start_new_song();
 			}
 		}
@@ -102,7 +109,6 @@ $(function(){
 			current_song_actual = d.current_song_actual;
 			// this will both affect player 1 and player 2
 			st("play new video for a new round",0);
-			$(".board_cover").hide();
 			play_video(current_song_id);
 		}
 
@@ -134,19 +140,9 @@ $(function(){
 						m:current_mood_energy
 			};
 			data_current_stream.update(u);
-
-			// stop game once rounds reached
-			if(d.game_round >= total_songs_to_play){
-				st("game ended",0);
-				ytplayer.stopVideo(); // stop video from playing
-				return;
+			if(u.game_round <= total_songs_to_play){
+				start_new_song();
 			}
-
-			// upload song sequence ui
-			$("#songs_sequence").html("song "+u.game_round+"/"+total_songs_to_play);
-			st("both player color selected",0);
-			$(".board_cover").hide();
-			start_new_song();
 		}
 	});
 });
@@ -257,6 +253,7 @@ function onytplayerStateChange(newState) {
    		play_mood_energy(current_mood_energy.mood,current_mood_energy.energy); // countine playing the same mood and energy
    }else if(newState == 1){
    	$("#caption").html("playing "+ current_song_actual);
+   	$(".board_cover").hide();
    }else if(newState == 0){
 
    }else if(newState == -1){

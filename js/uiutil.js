@@ -1,6 +1,6 @@
 $(document).ready(ui_init);
 
-var root_url = "https://musicflow.firebaseio.com/";
+var root_url = "https://flowmusic.firebaseio.com/";
 
 Handlebars.registerHelper('each_obj', function(context, options) {
   var ret = "";

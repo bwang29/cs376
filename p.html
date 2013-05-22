@@ -1,0 +1,72 @@
+<html>
+<head>
+  <link href='http://fonts.googleapis.com/css?family=Titillium+ Web|Noto+Sans|Noto+Serif|Roboto+Condensed' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet/less" type="text/css" href="css/index.less" />
+  <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+  <script src="js/jquery-1.9.0.min.js"></script>
+  <script src="js/color-0.4.1.min.js"></script>
+  <script src="js/less-1.3.3.min.js"></script>
+  <script src="js/handlebars-1.0.rc.1.min.js"></script>
+  <script src="js/swfobject.js"></script>
+  <script src="js/energy_data.min.js"></script> 
+  <script src="js/uiutil.js"></script>
+  <script src="js/webutil.js"></script>
+  <script src="js/p.js"></script>
+
+</head>
+<body>
+<div id="ytapiplayer">
+</div>
+<script id="handlebar_color_grid" type="text/x-handlebars-template">
+    <div id="color_grid">
+      {{#each colors}}
+        <div class='color_grid_item' data-color="{{this}}" style="background:{{this}}"></div>
+      {{/each}}
+    </div>
+</script>
+<script id="handlebar_hive" type="text/x-handlebars-template">
+    <div class='hives'>
+      {{#each_obj hives}}
+            <div data-color="{{key}}" class='hive' style="background:{{key}}">
+              {{#each value}}
+                <div class='mood'>{{this}}</div>
+              {{/each}}
+            </div>
+      {{/each_obj}}
+    </ul>
+</script>
+<div class="btn" id="new_room">Start a new room</div>
+<div id="songs_sequence"></div>
+<div id="caption"></div>
+<div id="color_board">
+  <div id="board_left">
+    <div id="board_left_cover" class="board_cover"></div>
+    <div id="board_left_status"></div>
+  </div>
+  <div id="board_right">
+    <div id="board_right_cover" class="board_cover"></div>
+    <div id="board_right_status"></div>
+  </div>
+</div>
+<div id="stage">
+  <div id="stage_left">
+    <div class="player_name">Waiting for player one.</div>
+  </div>
+  <div id="stage_right">
+    <div class="player_name">Waiting for player two.</div>
+  </div>
+</div>
+<div class="prompt" id="player_two_prompt">
+    Enter your name: 
+    <input id="player_two_name" />
+    <div class="btn" id="player_two_join">Join room</div>
+</div>
+<div class="prompt" id="player_one_waiting">
+    Waiting the other player to join. Please send this URL to your partner.
+</div>
+<div id="bottom">
+  
+</div>
+
+</body>
+</html>

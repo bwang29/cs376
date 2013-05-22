@@ -12,61 +12,16 @@
   <script src="js/uiutil.js"></script>
   <script src="js/webutil.js"></script>
   <script src="js/index.js"></script>
-
 </head>
 <body>
-<div id="ytapiplayer">
-</div>
-<script id="handlebar_color_grid" type="text/x-handlebars-template">
-    <div id="color_grid">
-      {{#each colors}}
-        <div class='color_grid_item' data-color="{{this}}" style="background:{{this}}"></div>
-      {{/each}}
-    </div>
-</script>
-<script id="handlebar_hive" type="text/x-handlebars-template">
-    <div class='hives'>
-      {{#each_obj hives}}
-            <div data-color="{{key}}" class='hive' style="background:{{key}}">
-              {{#each value}}
-                <div class='mood'>{{this}}</div>
-              {{/each}}
-            </div>
-      {{/each_obj}}
-    </ul>
-</script>
-<div class="btn" id="new_room">Start a new room</div>
-<div id="songs_sequence"></div>
-<div id="caption"></div>
-<div id="color_board">
-  <div id="board_left">
-    <div id="board_left_cover" class="board_cover"></div>
-    <div id="board_left_status"></div>
+  <div id="intro_prompt">
+    Welcome!
   </div>
-  <div id="board_right">
-    <div id="board_right_cover" class="board_cover"></div>
-    <div id="board_right_status"></div>
+  <div id="generate_room">
+    Your name:
+    <input id="start_name"/><br/>
+    <div class="btn" id="generate_room_button">Generate room</div>
+    <div id="error"></div>
   </div>
-</div>
-<div id="stage">
-  <div id="stage_left">
-    <div class="player_name">Waiting for player one.</div>
-  </div>
-  <div id="stage_right">
-    <div class="player_name">Waiting for player two.</div>
-  </div>
-</div>
-<div class="prompt" id="player_two_prompt">
-    Enter your name: 
-    <input id="player_two_name" />
-    <div class="btn" id="player_two_join">Join room</div>
-</div>
-<div class="prompt" id="player_one_waiting">
-    Waiting the other player to join. Please send this URL to your partner.
-</div>
-<div id="bottom">
-  
-</div>
-
 </body>
 </html>

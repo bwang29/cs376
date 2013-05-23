@@ -301,7 +301,8 @@ function gen_grid_ui(){
 
 // this function touches any database for synchronization, used for player 1
 function start_new_song(){
-	play_mood_energy("happy",0.5);
+	var energy_levels = [0.3,0.4,0.5,0.6,0.7,0.8];
+	play_mood_energy(pickRandomProperty(energy_data),energy_levels[Math.floor(Math.random()*energy_levels.length)]);
 }
 
 // this function touches any database for synchronization, used for player 1
@@ -449,3 +450,11 @@ function calculate_similarity(hex1,hex2){
  	return (decimal*100).toFixed(0);
 }
 
+function pickRandomProperty(obj) {
+    var result;
+    var count = 0;
+    for (var prop in obj)
+        if (Math.random() < 1/++count)
+           result = prop;
+    return result;
+}

@@ -22,6 +22,10 @@ function create_room_with_friends(){
 			$("#error").append("Name is required");
 			duplicated_creation = false;
 			return;
+		}else if(d[key].length > 40 ){
+			$("#error").append("Name should be less than 40 characters");
+			duplicated_creation = false;
+			return;
 		}
 	}
 	$("#generate_room_button").html("loading..");

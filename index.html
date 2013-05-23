@@ -14,14 +14,19 @@
   <script src="js/index.js"></script>
 </head>
 <body>
-  <div id="intro_prompt">
-    Welcome!
-  </div>
-  <div id="generate_room">
-    Your name:
-    <input id="start_name"/><br/>
-    <div class="btn" id="generate_room_button">Generate room</div>
-    <div id="error"></div>
-  </div>
+<div id="intro_prompt">
+    <div id="intro_prompt_left"></div>
+    <div id="intro_prompt_middle">ViSiMu</div>
+    <div id="intro_prompt_right"></div>
+    <div id='intro_prompt_words'> Listen to music with your friends and test your similarity </div>
+
+     <div id="generate_room">
+      Please create a room first:<br/>
+      <input id="start_name" placeholder="your name" />
+      <div class="btn" id="generate_room_button">Start</div>
+      <div id="error"></div>
+    </div>
+</div>
+ 
 </body>
 </html>

@@ -19,6 +19,7 @@
 </div>
 <script id="handlebar_color_grid" type="text/x-handlebars-template">
     <div id="color_grid">
+    <div id="color_cover"> Waiting for the next song.</div>
       {{#each colors}}
         <div class='color_grid_item' data-color="{{this}}" style="background:{{this}}"></div>
       {{/each}}
@@ -37,32 +38,46 @@
 </script>
 <div class="btn" id="new_room">Start a new room</div>
 <div id="songs_sequence"></div>
-<div id="caption"></div>
+<div id="caption">Choose a color that represents the mood of the song.</div>
+<div id="result_vis"></div>
+<div id="color_result">
+  <div id="bubble_left"><div id="bubble_left_color"></div></div>
+  <div id="bubble_score"> 
+    <div id="round_score"> 75% similar </div>
+    Playing next song in 3 seonds..
+  </div>
+  <div id="bubble_right"><div id="bubble_right_color"></div></div>
+</div>
 <div id="color_board">
-  <div id="board_left">
-    <div id="board_left_cover" class="board_cover"></div>
-    <div id="board_left_status"></div>
-  </div>
-  <div id="board_right">
-    <div id="board_right_cover" class="board_cover"></div>
-    <div id="board_right_status"></div>
-  </div>
+  <div id="board_color_panel"></div>  
 </div>
 <div id="stage">
   <div id="stage_left">
+   <img src="image/waiting_left.png"/>
     <div class="player_name">Waiting for player one.</div>
+    <div id="board_left_status" style="color:#999">still choosing color..</div>
   </div>
   <div id="stage_right">
+    <img src="image/listening_right.png"/>
     <div class="player_name">Waiting for player two.</div>
+    <div id="board_right_status" style="color:#999">still choosing color..</div>
   </div>
 </div>
 <div class="prompt" id="player_two_prompt">
-    Enter your name: 
-    <input id="player_two_name" />
-    <div class="btn" id="player_two_join">Join room</div>
+    Enter your name to join the game: <br/>
+    <input id="player_two_name" placeholder="your name"/>
+    <div class="btn" id="player_two_join">Start</div>
 </div>
 <div class="prompt" id="player_one_waiting">
-    Waiting the other player to join. Please send this URL to your partner.
+    Please send this URL to your friend to invite his/her. The game will start immediately after your partner enters the room.
+    <br/><br/><br/><div id="player_one_send_message" style="padding:20px;color:#666; border:1px solid #999; width:auto; display:inline; margin:30px;"></div><br/><br/><br/><br/>
+    <div class="il">
+      <img src="image/waiting_left.png"/>
+    </div>
+    <div class="il logo">ViSiMu</div>
+    <div class="il">
+      <img src="image/waiting_right.png"/>
+    </div>
 </div>
 <div id="bottom">
   

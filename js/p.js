@@ -20,6 +20,7 @@ var ytplayer; // youtube player
 var current_song_attempt_t = "";
 var current_song_attempt_a = "";
 var total_songs_to_play = 3;
+var game_disconnected = false;
 
 // patch handlebars to enable object loops
 Handlebars.registerHelper('each_obj', function(context, options) {
@@ -28,10 +29,55 @@ Handlebars.registerHelper('each_obj', function(context, options) {
   return ret;
 });
 
+var vis = {
+      "game_started" : true,
+      "player_two_color" : "",
+      "1" : {
+        "a" : "Big Band",
+        "1" : "#FFF677",
+        "m" : {
+          "mood" : "happy",
+          "energy" : 0.5
+        },
+        "t" : "El Africano",
+        "2" : "#FFF677"
+      },
+      "3" : {
+        "a" : "Marque",
+        "1" : "#EEDE00",
+        "m" : {
+          "mood" : "happy",
+          "energy" : 0.5
+        },
+        "t" : "Sleep Baby",
+        "2" : "#17B0FD"
+      },
+      "current_song_actual" : "Sleep Baby Marque",
+      "current_song_id" : "bAiw21gSxyQ",
+      "player_one_name" : "you know?",
+      "current_song_attempt_a" : "Marque",
+      "player_one_color" : "",
+      "current_song_attempt_t" : "Sleep Baby",
+      "disconnected" : true,
+      "2" : {
+        "a" : "The Polyphonic Spree",
+        "1" : "#AA9F00",
+        "m" : {
+          "mood" : "happy",
+          "energy" : 0.5
+        },
+        "t" : "Section 29 [Light To Follow]",
+        "2" : "#17B0FD"
+      },
+      "game_round" : 4,
+      "player_two_name" : "nice"
+    };
 $(function(){
+	$("#result_vis").html(generate_result_vis(vis));
 	$("#new_room").click(function(){
 		window.location.href = window.location.href.split("p.html")[0];
 	});
+	$("#player_one_send_message").html(window.location.href);
 	// get room id
 	room_id = ws.localURLParam().room;
 	if(!room_id || room_id==""){
@@ -55,6 +101,19 @@ $(function(){
 		$("#stage_left .player_name").text(d.player_one_name);
 		$("#stage_right .player_name").text(d.player_two_name);
 		// if player two does not exist and user is not owner
+
+		if(typeof d.player_one_color !== "undefined" && d.player_one_color !==""){
+			$("#board_left_status").html("finished choosing color");
+		}else{
+			$("#board_left_status").html("still choosing color..");
+		}
+
+		if(typeof d.player_two_color !== "undefined" && d.player_two_color !==""){
+			$("#board_right_status").html("finished choosing color");
+		}else{
+			$("#board_right_status").html("still choosing color..");
+		}
+
 		if(!d.player_two_name){
 			if(is_owner == false){
 				st("Player two is ready. UI built for player one",0);
@@ -74,19 +133,23 @@ $(function(){
 			}
 			if(typeof d.game_round != "undefined"){
 				if(d.game_round <= total_songs_to_play){
-					$("#songs_sequence").html("song "+d.game_round+"/"+total_songs_to_play);
+					$("#songs_sequence").html("Round "+d.game_round+"/"+total_songs_to_play);
 				}else{
-					st("game ended",0);
+					st("Game finished",0);
+					$("#color_result").slideUp();
+					$("#color_board").slideUp();
+					$("#result_vis").slideDown();
 					ytplayer.stopVideo(); // stop video from playing
 					return;
 				}
 			}
 			if(d.disconnected == true){
 				if(is_player_one){
-					$("#board_right_status").html("player two disconnected");
+					$("#caption").html("Player one disconnected. Game stopped.");
 				}else{
-					$("#board_left_status").html("player one disconnected");
+					$("#caption").html("Player two disconnected. Game stopped.");
 				}
+				game_disconnected = true;
 				ytplayer.stopVideo(); // stop video from playing
 				return;
 			}
@@ -107,42 +170,42 @@ $(function(){
 			st("song id changed, previous: "+ current_song_id + " new " + d.current_song_id,0);
 			current_song_id = d.current_song_id;
 			current_song_actual = d.current_song_actual;
+			current_song_attempt_a = d.current_song_attempt_a;
+			current_song_attempt_t = d.current_song_attempt_t;
 			// this will both affect player 1 and player 2
 			st("play new video for a new round",0);
 			play_video(current_song_id);
 		}
 
-		if(typeof d.player_one_color !== "undefined" && d.player_one_color !==""){
-			if(is_player_two) $("#board_left_status").html("player one finished choosing color");
-		}else{
-			$("#board_left_status").html("player one is still choosing color..");
-		}
-
-		if(typeof d.player_two_color !== "undefined" && d.player_two_color !==""){
-			if(is_player_one) $("#board_right_status").html("player two finished choosing color");
-		}else{
-			$("#board_right_status").html("player two is still choosing color..");
-		}
-
-		// only player one has control to start a new song
-		if(d.game_started && is_player_one && typeof d.player_one_color !== "undefined" && d.player_one_color !== "" && typeof d.player_two_color !== "undefined" && d.player_two_color !==""){
-			
-			var u = {
-				game_round : d.game_round + 1,
-				player_one_color: "", // must set this to avoid infinite call back
-				player_two_color: ""
-			};
-			u[d.game_round]={
-						1:d.player_one_color,
-						2:d.player_two_color,
-						a:current_song_attempt_a,
-						t:current_song_attempt_t,
-						m:current_mood_energy
-			};
-			data_current_stream.update(u);
-			if(u.game_round <= total_songs_to_play){
-				start_new_song();
-			}
+		
+		if(d.game_started && typeof d.player_one_color !== "undefined" && d.player_one_color !== "" && typeof d.player_two_color !== "undefined" && d.player_two_color !==""){
+			$("#color_board").slideUp();
+			$("#color_result").slideDown();
+			$("#bubble_left_color").css({background:d.player_one_color});
+			$("#bubble_right_color").css({background:d.player_two_color});
+			// only player one has control to start a new song
+			setTimeout(function(){
+				$("#color_result").slideUp();
+				$("#color_board").slideDown();
+				if(is_player_one){
+					var u = {
+						game_round : d.game_round + 1,
+						player_one_color: "", // must set this to avoid infinite call back
+						player_two_color: ""
+					};
+					u[d.game_round]={
+								1:d.player_one_color,
+								2:d.player_two_color,
+								a:current_song_attempt_a,
+								t:current_song_attempt_t,
+								m:current_mood_energy
+					};
+					data_current_stream.update(u);
+					if(u.game_round <= total_songs_to_play){
+						start_new_song();
+					}
+				}
+			},3000);
 		}
 	});
 });
@@ -150,7 +213,10 @@ $(function(){
 function attach_player_two(){
 	$("#player_two_join").click(function(){
 		if($("#player_two_name").val().trim() == ""){
-			$("#player_two_name").after("name can't be empty");
+			$("#player_two_join").after("<br/>name can't be empty.");
+			return;
+		}else if ($("#player_two_name").val().trim().length > 40){
+			$("#player_two_join").after("<br/>name should be less than 40 characters.");
 			return;
 		}
 		// update player 2 name
@@ -186,16 +252,12 @@ function gen_grid_ui(){
 	gen_color_grid();
 	var color_grid_template = make_template("handlebar_color_grid");
 	var color_grid__html = color_grid_template({colors:color_grid});
-	if(is_player_two){
-		$("#board_right").append(color_grid__html);
-	}else{
-		$("#board_left").append(color_grid__html);
-	}
+	$("#board_color_panel").append(color_grid__html);
 	schedule(function(){
 		$(".color_grid_item").click(function(){
 			var current_selected_color = $(this).data("color");
 			console.log(current_selected_color);
-			$($(this).parent().parent().find(".board_cover")).css({background:current_selected_color}).show();
+			$("#color_cover").show();
 			if(is_player_one){
 				data_current_stream.update({player_one_color:current_selected_color});
 			}else{
@@ -252,14 +314,20 @@ function onytplayerStateChange(newState) {
    if(newState == 2){
    		play_mood_energy(current_mood_energy.mood,current_mood_energy.energy); // countine playing the same mood and energy
    }else if(newState == 1){
-   	$("#caption").html("playing "+ current_song_actual);
-   	$(".board_cover").hide();
+   	$("#caption").html(current_song_attempt_t + " <span style='color:#999;font-size:12px'> - " + current_song_attempt_a+"</span>");
+   	$("#color_cover").hide();
    }else if(newState == 0){
 
    }else if(newState == -1){
-   	$("#caption").html("loading music..");
+   	if(!game_disconnected){
+   		$("#caption").html("loading music..");
+   	}
    }else if(newState == 5){
-   	$("#caption").html("game ended");
+   	if(!game_disconnected){
+   		$("#caption").html("Game finished");
+   	}
+   	$("#board_right_status").hide();
+   	$("#board_left_status").hide();
    	// don't put any thing here, might affect game ending state
    }
 }
@@ -281,7 +349,9 @@ function get_youtube_videos(q){
 		data_current_stream.update(
 			{
 				current_song_id:current_song_id,
-				current_song_actual: current_song_actual
+				current_song_actual: current_song_actual,
+				current_song_attempt_a: current_song_attempt_a,
+				current_song_attempt_t: current_song_attempt_t
 			}
 		);
 		for (var i =0; i < videos.length ;i++) {
@@ -323,5 +393,21 @@ function st(msg,type){
 	}else{
 		console.warn("[error] "+msg);
 	}
+}
+
+function generate_result_vis(obj){
+	var html = "<div><br/><br/>";
+	html+=obj.player_one_name + " and " + obj.player_two_name + " have a similar score of <br/><span style='font-size:100px'>79%</span>";
+	for(key in obj){
+		if(isNaN(key)==false){
+			html += "<div class='vb'><div class='vd'><div class='vt'>"+obj[key].t+"</div><div class='va'>"+obj[key].a+"</div></div><div class='vl' style='background:"+obj[key][1]+"'></div><div class='vr' style='background:"+obj[key][2]+"'></div></div>";
+		}
+	}
+	html += "</div>";
+	return html;
+}
+
+function calculate_similarity(){
+
 }
 

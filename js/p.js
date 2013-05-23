@@ -105,6 +105,7 @@ $(function(){
 		// if player two does not exist and user is not owner
 
 		if(d.game_finished){
+			$("#caption").html("Game finished");
 			$("#result_vis").html(generate_result_vis(d));
 			$("#new_room").show();
 			$("#color_result").slideUp();
@@ -196,6 +197,7 @@ $(function(){
 
 		
 		if(d.game_started && typeof d.player_one_color !== "undefined" && d.player_one_color !== "" && typeof d.player_two_color !== "undefined" && d.player_two_color !==""){
+			$("#round_score").html(calculate_similarity(d.player_one_color,d.player_two_color)+"% similar");
 			$("#color_board").slideUp();
 			$("#color_result").slideDown();
 			$("#bubble_left_color").css({background:d.player_one_color});
@@ -413,7 +415,8 @@ function st(msg,type){
 }
 
 function generate_result_vis(obj){
-	var html = "<div><br/><br/>";
+	var html = "<div><br/>";
+	html += '<a href="https://www.facebook.com/sharer/sharer.php?u='+'http://stanford.edu/~borui'+'" target="_blank" style="color:#133783; text-decoration:none"> Share this game on Facebook </a><br/>';
 	html+=obj.player_one_name + " and " + obj.player_two_name + " have a similar score of <br/><span style='font-size:100px'>79%</span>";
 	for(key in obj){
 		if(isNaN(key)==false){
@@ -424,7 +427,10 @@ function generate_result_vis(obj){
 	return html;
 }
 
-function calculate_similarity(){
-
+function calculate_similarity(hex1,hex2){
+ 	var color1 = Color(hex1).rgb();
+ 	var color2 = Color(hex2).rgb();
+ 	var decimal =  1-(Math.abs(color1.r - color2.r) + Math.abs(color1.g - color2.g) + Math.abs(color1.b - color2.b))/765;
+ 	return (decimal*100).toFixed(0);
 }
 

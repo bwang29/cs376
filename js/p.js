@@ -21,6 +21,7 @@ var current_song_attempt_t = "";
 var current_song_attempt_a = "";
 var total_songs_to_play = 3;
 var game_disconnected = false;
+var disconnected_listener_atteched = false;
 
 // patch handlebars to enable object loops
 Handlebars.registerHelper('each_obj', function(context, options) {
@@ -29,6 +30,7 @@ Handlebars.registerHelper('each_obj', function(context, options) {
   return ret;
 });
 
+// vis is for testing purpose
 var vis = {
       "game_started" : true,
       "player_two_color" : "",
@@ -73,7 +75,7 @@ var vis = {
       "player_two_name" : "nice"
     };
 $(function(){
-	$("#result_vis").html(generate_result_vis(vis));
+	//$("#result_vis").html(generate_result_vis(vis));
 	$("#new_room").click(function(){
 		window.location.href = window.location.href.split("p.html")[0];
 	});
@@ -81,7 +83,8 @@ $(function(){
 	// get room id
 	room_id = ws.localURLParam().room;
 	if(!room_id || room_id==""){
-		$("#caption").html("This room is not associated with any listeners. You must have entered this page in a wrong way.");
+		$("#caption").html("This room is not associated with any players. You must have entered this page in a wrong way.");
+		$("#new_room").show();
 		return;
 	}
 	// check if user is owner
@@ -95,12 +98,20 @@ $(function(){
 	}
 	// connect to data stream
 	data_current_stream = new Firebase(root_url+'rooms/'+room_id);
-	data_current_stream.onDisconnect().update({disconnected:true});
 	data_current_stream.on('value',function(snapshot){
 		var d = snapshot.val();
 		$("#stage_left .player_name").text(d.player_one_name);
 		$("#stage_right .player_name").text(d.player_two_name);
 		// if player two does not exist and user is not owner
+
+		if(d.game_finished){
+			$("#result_vis").html(generate_result_vis(d));
+			$("#new_room").show();
+			$("#color_result").slideUp();
+			$("#color_board").slideUp();
+			$("#result_vis").slideDown();
+			return;
+		}
 
 		if(typeof d.player_one_color !== "undefined" && d.player_one_color !==""){
 			$("#board_left_status").html("finished choosing color");
@@ -129,16 +140,21 @@ $(function(){
 			if(!ui_presented){
 				st("the room has been used before.",-1);
 				$("#caption").html("The room has already been used. Please create a new room.");
+				$("#new_room").show();
 				return;
+			}else{
+				// make sure on disconnect is only attached by the owner and does not attach twice
+				if(!disconnected_listener_atteched){
+					disconnected_listener_atteched = true;
+					data_current_stream.onDisconnect().update({disconnected:true});
+				}
 			}
 			if(typeof d.game_round != "undefined"){
 				if(d.game_round <= total_songs_to_play){
 					$("#songs_sequence").html("Round "+d.game_round+"/"+total_songs_to_play);
 				}else{
+					data_current_stream.update({game_finished:true});
 					st("Game finished",0);
-					$("#color_result").slideUp();
-					$("#color_board").slideUp();
-					$("#result_vis").slideDown();
 					ytplayer.stopVideo(); // stop video from playing
 					return;
 				}
@@ -149,6 +165,7 @@ $(function(){
 				}else{
 					$("#caption").html("Player two disconnected. Game stopped.");
 				}
+				$("#new_room").show();
 				game_disconnected = true;
 				ytplayer.stopVideo(); // stop video from playing
 				return;

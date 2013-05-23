@@ -437,7 +437,7 @@ function generate_result_vis(obj){
 			score_total += parseInt(calculate_similarity(obj[key][1],obj[key][2]));
 		}
 	}
-	html+="<div stype='font-size:25px'>"+obj.player_one_name + " and " + obj.player_two_name + " have a similar score of </div><span style='font-size:100px'>"+score_total/total_songs_to_play+"%</span>";
+	html+="<div style='font-size:25px'>"+obj.player_one_name + " and " + obj.player_two_name + " have a similar score of </div><span style='font-size:100px'>"+(score_total/total_songs_to_play).toFixed(0)+"%</span>";
 	html += "</div>";
 	return html;
 }

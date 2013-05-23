@@ -82,6 +82,9 @@ body{
 	&:hover{
 		border: 3px solid #FFF;
 	};
+	&.color_active{
+		border: 6px solid #FFF;
+	}
 }
 
 #color_grid{
@@ -94,13 +97,14 @@ body{
 		width: 100%
 		height: 100%;
 		top: 20px;
-		left:20px;
-		right: 25px;
+		left:24px;
+		right: 20px;
 		bottom: 20px;
 		background: rgba(0,0,0,0.8);
 		text-align: center;
 		line-height: 230px;
 		color: white;
+		z-index: 500;
 	}
 }
 #result_vis{
@@ -156,6 +160,12 @@ body{
 	width: 600px;
 	margin: 0 auto;
 	position: relative;
+	text-align: center;
+}
+
+#confirm_color{
+	.btn;
+	margin: 10px 0;
 }
 
 #stage{
@@ -193,7 +203,6 @@ body{
 	cursor: pointer;
 	border: 3px solid black;
 	position: relative;
-	z-index: 500;
 	&:hover{
 		background: #fff;
 		color: black;
@@ -212,6 +221,7 @@ body{
 	color: black;
 	background: white;
 	opacity: 1.0;
+	z-index: 800;
 }
 
 #intro_prompt{

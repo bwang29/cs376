@@ -22,6 +22,7 @@ var current_song_attempt_a = "";
 var total_songs_to_play = 3;
 var game_disconnected = false;
 var disconnected_listener_atteched = false;
+var current_selected_color = false;
 
 // patch handlebars to enable object loops
 Handlebars.registerHelper('each_obj', function(context, options) {
@@ -274,14 +275,26 @@ function gen_grid_ui(){
 	$("#board_color_panel").append(color_grid__html);
 	schedule(function(){
 		$(".color_grid_item").click(function(){
-			var current_selected_color = $(this).data("color");
+			$(".color_grid_item").removeClass("color_active");
+			$(this).addClass("color_active");
+			current_selected_color = $(this).data("color");
 			console.log(current_selected_color);
+			$("#confirm_color").css({background:current_selected_color});
+		});
+		$("#confirm_color").click(function(){
+			$(".color_grid_item").removeClass("color_active");
+			if(!current_selected_color){
+				alert("You have not selected a color yet.");
+				return;
+			}
 			$("#color_cover").show();
 			if(is_player_one){
 				data_current_stream.update({player_one_color:current_selected_color});
 			}else{
 				data_current_stream.update({player_two_color:current_selected_color});
 			}
+			current_selected_color = false;
+			$("#confirm_color").css({background:"#333"});
 		});
 	});
 }
@@ -416,13 +429,15 @@ function st(msg,type){
 
 function generate_result_vis(obj){
 	var html = "<div><br/>";
-	html += '<a href="https://www.facebook.com/sharer/sharer.php?u='+'http://stanford.edu/~borui'+'" target="_blank" style="color:#133783; text-decoration:none"> Share this game on Facebook </a><br/>';
-	html+=obj.player_one_name + " and " + obj.player_two_name + " have a similar score of <br/><span style='font-size:100px'>79%</span>";
+	//html += '<a href="https://www.facebook.com/sharer/sharer.php?u='+'http://stanford.edu/~borui'+'" target="_blank" style="color:#133783; text-decoration:none"> Share this game on Facebook </a><br/>';
+	var score_total = 0;
 	for(key in obj){
 		if(isNaN(key)==false){
 			html += "<div class='vb'><div class='vd'><div class='vt'>"+obj[key].t+"</div><div class='va'>"+obj[key].a+"</div></div><div class='vl' style='background:"+obj[key][1]+"'></div><div class='vr' style='background:"+obj[key][2]+"'></div></div>";
+			score_total += parseInt(calculate_similarity(obj[key][1],obj[key][2]));
 		}
 	}
+	html+="<div stype='font-size:25px'>"+obj.player_one_name + " and " + obj.player_two_name + " have a similar score of </div><span style='font-size:100px'>"+score_total/total_songs_to_play+"%</span>";
 	html += "</div>";
 	return html;
 }

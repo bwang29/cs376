@@ -1,5 +1,5 @@
 var color_mapping = {"#5c0c0f":["aggressive","angry","bouncy","energetic"], "#613c07":["dramatic","passionate","angst-ridden","disturbing","enthusiastic","intense"], "#655f00":["joyous","happy","cheerful","gleeful","lively"], "#004312":["quiet","soothing","calming","gentle","hypnotic","laid-back","mellow","peaceful"], "#013e5d":["carefree","humorous","playful","whimsical","light","fun"], "#210034":["spiritual","elegant" ], "#333333":["dreamy","sentimental"]};
-
+var simple_color = ["#ffa7a4","#ffd8aa","#fffba6","#d6ea98","#91e5c4","#a5bae2","#c6abdf","#e9a2cf","#f2f2f2","#ff2400","#ff8e00","#fffb00","#89c300","#00b366","#0063b3","#5f20a0","#c82378","#666666","#7d2000","#7d4700","#7c7800","#445d00","#005834","#003259","#411166","#610e3d","#111111"];
 var params = { allowScriptAccess: "always" };
 var atts = { id: "myytplayer" };
 var player_initiated = false;
@@ -245,11 +245,14 @@ function attach_player_two(){
 }
 
 function gen_color_grid(){
-	for(var i=0; i<5; i++){
-		for(key in color_mapping){
-			var color = Color(key).lighten(i/1.5);
-			color_grid.push(color.hexString());
-		}
+	// for(var i=0; i<5; i++){
+	// 	for(key in color_mapping){
+	// 		var color = Color(key).lighten(i/1.5);
+	// 		color_grid.push(color.hexString());
+	// 	}
+	// }
+	for(var i=0; i<simple_color.length;i++){
+		color_grid.push(simple_color[i]);
 	}
 }
 

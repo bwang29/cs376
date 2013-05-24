@@ -15,6 +15,14 @@
 
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <div id="ytapiplayer">
 </div>
 <script id="handlebar_color_grid" type="text/x-handlebars-template">
@@ -38,6 +46,7 @@
     </ul>
 </script>
 <div id="songs_sequence"></div>
+<div style='display:none;text-align:center;padding-left:100px' class="fb-like" data-href="http://stanford.edu/~borui/offshore/flowmusic/" data-send="true" data-width="450" data-show-faces="true"></div>
 <div id="caption">Choose a color that represents the mood of the song.</div>
 <div id="result_vis"></div>
 <div id="color_result">

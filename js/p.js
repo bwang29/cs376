@@ -19,7 +19,7 @@ var ui_presented = false; // if ui doe not present ,it means the room is already
 var ytplayer; // youtube player
 var current_song_attempt_t = "";
 var current_song_attempt_a = "";
-var total_songs_to_play = 3;
+var total_songs_to_play = 5;
 var game_disconnected = false;
 var disconnected_listener_atteched = false;
 var current_selected_color = false;
@@ -429,13 +429,14 @@ function st(msg,type){
 }
 
 function generate_result_vis(obj){
-	var html = "<div><br/>";
-	//html += '<a href="https://www.facebook.com/sharer/sharer.php?u='+'http://stanford.edu/~borui'+'" target="_blank" style="color:#133783; text-decoration:none"> Share this game on Facebook </a><br/>';
+	var html = "<div>";
+	$(".fb-like").show();
 	var score_total = 0;
 	for(key in obj){
 		if(isNaN(key)==false){
-			html += "<div class='vb'><div class='vd'><div class='vt'>"+obj[key].t+"</div><div class='va'>"+obj[key].a+"</div></div><div class='vl' style='background:"+obj[key][1]+"'></div><div class='vr' style='background:"+obj[key][2]+"'></div></div>";
-			score_total += parseInt(calculate_similarity(obj[key][1],obj[key][2]));
+			var score = parseInt(calculate_similarity(obj[key][1],obj[key][2]));
+			html += "<div class='vb'><div class='vd'><div class='vt'>"+obj[key].t+"</div><div class='va'>"+obj[key].a+"</div></div><div class='vl' style='background:"+obj[key][1]+"'></div>"+score+"% match <div class='vr' style='background:"+obj[key][2]+"'></div></div>";
+			score_total += score;
 		}
 	}
 	html+="<div style='font-size:25px'>"+obj.player_one_name + " and " + obj.player_two_name + " have a similar score of </div><span style='font-size:100px'>"+(score_total/total_songs_to_play).toFixed(0)+"%</span>";

@@ -450,7 +450,7 @@ function generate_result_vis(obj){
 function calculate_similarity(hex1,hex2){
  	var color1 = Color(hex1).rgb();
  	var color2 = Color(hex2).rgb();
- 	var decimal =  1-(Math.abs(color1.r - color2.r) + Math.abs(color1.g - color2.g) + Math.abs(color1.b - color2.b))/765;
+ 	var decimal =  1-(Math.abs(color1.r - color2.r) + Math.abs(color1.g - color2.g) + Math.abs(color1.b - color2.b))/1500;
  	return (decimal*100).toFixed(0);
 }
 

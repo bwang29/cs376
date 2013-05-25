@@ -472,12 +472,12 @@ function generate_result_vis(obj){
 	return html;
 }
 
-function calculate_similarity(hex1,hex2){
- 	var color1 = Color(hex1).rgb();
- 	var color2 = Color(hex2).rgb();
- 	var decimal =  1-(Math.abs(color1.r - color2.r) + Math.abs(color1.g - color2.g) + Math.abs(color1.b - color2.b))/1500;
- 	return (decimal*100).toFixed(0);
-}
+// function calculate_similarity(hex1,hex2){
+//  	var color1 = Color(hex1).rgb();
+//  	var color2 = Color(hex2).rgb();
+//  	var decimal =  1-(Math.abs(color1.r - color2.r) + Math.abs(color1.g - color2.g) + Math.abs(color1.b - color2.b))/1500;
+//  	return (decimal*100).toFixed(0);
+// }
 
 function pickRandomProperty(obj) {
     var result;
@@ -486,4 +486,22 @@ function pickRandomProperty(obj) {
         if (Math.random() < 1/++count)
            result = prop;
     return result;
+}
+
+function calculate_similarity(hex1,hex2){
+	var a = simple_color.indexOf(hex1);
+	var b = simple_color.indexOf(hex2);
+	var similarity = 0;
+	if(a == b){ 
+	    similarity = 1; 
+	}else{
+	   	var	s1= Math.abs(Math.floor(a/9) - Math.floor(b/9));
+	   	var	s2= Math.abs(a%9-b%9);
+	    if(s2>4){
+	         similarity= 1-0.1*s1-0.2*(8-s2);   
+	    }else{
+	         similarity= 1-0.1*s1-0.2*s2; 
+	    }
+	}
+	return (similarity * 100).toFixed(0); // return percentage
 }

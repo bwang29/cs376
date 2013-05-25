@@ -12,7 +12,7 @@ function ui_init(){
 	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 	if(!is_chrome){
 		alert("The application only supports the later versions of Google Chrome.");
-		$("body").append("<div style='position:fixed;width:100%;height:100%;text-align:center;background:white'>This application supports Google Chomr only.</div>");
+		$("body").append("<div style='position:fixed;width:100%;height:100%;text-align:center;background:white'>This application supports Google Chrome only.</div>");
 	}
 	schedule(page);
 }

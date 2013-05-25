@@ -8,7 +8,7 @@
   <script src="js/less-1.3.3.min.js"></script>
   <script src="js/handlebars-1.0.rc.1.min.js"></script>
   <script src="js/swfobject.js"></script>
-  <script src="js/energy_data.min.js"></script> 
+  <script src="js/best_songs.js"></script> 
   <script src="js/uiutil.js"></script>
   <script src="js/webutil.js"></script>
   <script src="js/p.js"></script>
@@ -28,6 +28,7 @@
 <script id="handlebar_color_grid" type="text/x-handlebars-template">
     <div id="color_grid">
     <div id="color_cover"> Waiting for the next song ...</div>
+    <div id="color_instruction">Please Select the color of the song.</div>
       {{#each colors}}
         <div class='color_grid_item' data-color="{{this}}" style="background:{{this}}"></div>
       {{/each}}

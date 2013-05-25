@@ -23,6 +23,7 @@ var total_songs_to_play = 5;
 var game_disconnected = false;
 var disconnected_listener_atteched = false;
 var current_selected_color = false;
+var use_energy_data = false;
 
 // patch handlebars to enable object loops
 Handlebars.registerHelper('each_obj', function(context, options) {
@@ -312,26 +313,35 @@ function start_new_song(){
 function play_mood_energy(mood,energy){
 	current_mood_energy = {mood:mood,energy:energy};
 	st("select mood/energy: " + mood+"/"+energy,0);
-	var mood_songs = energy_data[mood];
-	if(!mood_songs){
-		st("mood does not exist: "+mood,1);
-		return;
+	if(use_energy_data){
+		var mood_songs = energy_data[mood];
+		if(!mood_songs){
+			st("mood does not exist: "+mood,1);
+			return;
+		}
+		if(typeof mood_songs[energy] === "undefined" ){
+			st("energy level does not exist: "+ energy,1);
+			return;
+		}
+		var energy_length = mood_songs[energy].len;
+		if(energy_length == 0){
+			st("length of songs in energy level is zero: "+ energy,1);
+			return;
+		}
+		var song_to_play = mood_songs[energy].songs[getRandomInt(0,energy_length-1)];
+		current_song_attempt_t = song_to_play.t;
+		current_song_attempt_a = song_to_play.a;
+		current_song_attempt = song_to_play.t + " " + song_to_play.a;
+		st("about to play : " + current_song_attempt,0);
+		get_youtube_videos(current_song_attempt);
+	}else{
+		var song_to_play = best_songs[Math.floor(Math.random()*best_songs.length)];
+		current_song_attempt_t = song_to_play;
+		current_song_attempt_a = song_to_play;
+		current_song_attempt = song_to_play;
+		st("about to play : " + current_song_attempt,0);
+		get_youtube_videos(current_song_attempt);
 	}
-	if(typeof mood_songs[energy] === "undefined" ){
-		st("energy level does not exist: "+ energy,1);
-		return;
-	}
-	var energy_length = mood_songs[energy].len;
-	if(energy_length == 0){
-		st("length of songs in energy level is zero: "+ energy,1);
-		return;
-	}
-	var song_to_play = mood_songs[energy].songs[getRandomInt(0,energy_length-1)];
-	current_song_attempt_t = song_to_play.t;
-	current_song_attempt_a = song_to_play.a;
-	current_song_attempt = song_to_play.t + " " + song_to_play.a;
-	st("about to play : " + current_song_attempt,0);
-	get_youtube_videos(current_song_attempt);
 }
 
 // Youtube playing facilities
@@ -432,6 +442,7 @@ function st(msg,type){
 }
 
 function generate_result_vis(obj){
+	$("#stage").hide();
 	var html = "<div>";
 	$(".fb-like").show();
 	var score_total = 0;
@@ -442,7 +453,21 @@ function generate_result_vis(obj){
 			score_total += score;
 		}
 	}
-	html+="<div style='font-size:25px'>"+obj.player_one_name + " and " + obj.player_two_name + " have a similar score of </div><span style='font-size:100px'>"+(score_total/total_songs_to_play).toFixed(0)+"%</span>";
+	var percentage = (score_total/total_songs_to_play).toFixed(0);
+	html+="<div style='font-size:25px'>"+obj.player_one_name + " and " + obj.player_two_name + " have a similar score of </div><span style='font-size:100px'>"+percentage+"%</span>";
+	var picture = "";
+	if(percentage > 80){
+		picture = "80.jpg";
+	}else if(percentage > 60){
+		picture = "60_80.jpg";
+	}else if(percentage > 40){
+		picture = "40_60.jpg";
+	}else if(percentage > 20){
+		picture = "20_40.gif";
+	}else{
+		picture = "20.jpg";
+	}
+	html += "<div id='score_image'><img width='300px' src='image/"+picture+"'></div>";
 	html += "</div>";
 	return html;
 }

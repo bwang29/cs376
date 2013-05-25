@@ -336,8 +336,8 @@ function play_mood_energy(mood,energy){
 		get_youtube_videos(current_song_attempt);
 	}else{
 		var song_to_play = best_songs[Math.floor(Math.random()*best_songs.length)];
-		current_song_attempt_t = song_to_play;
-		current_song_attempt_a = song_to_play;
+		current_song_attempt_t = song_to_play.split(" ")[0];
+		current_song_attempt_a = song_to_play.split(" ")[1];
 		current_song_attempt = song_to_play;
 		st("about to play : " + current_song_attempt,0);
 		get_youtube_videos(current_song_attempt);

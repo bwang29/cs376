@@ -100,6 +100,16 @@ $(function(){
 	}
 	// connect to data stream
 	data_current_stream = new Firebase(root_url+'rooms/'+room_id);
+	leader_board_data_stream = new Firebase(root_url+'leader/');
+	leader_board_data_stream_limited = leader_board_data_stream.limit(20);
+	leader_board_data_stream_limited.on('value',function(snapshot){
+		var leaders = snapshot.val();
+		var html = "";
+		for(key in leaders){
+			html+=leaders[key].one +" and "+leaders[key].two+" - "+leaders[key].score + "% <br/>"
+		}
+		$("#leader_board").html(html);
+	});
 	data_current_stream.on('value',function(snapshot){
 		var d = snapshot.val();
 		$("#stage_left .player_name").text(d.player_one_name);
@@ -469,6 +479,9 @@ function generate_result_vis(obj){
 	}
 	html += "<div id='score_image'><img width='300px' src='image/"+picture+"'></div>";
 	html += "</div>";
+	if(is_player_one){
+		leader_board_data_stream.push({one:obj.player_one_name,two:obj.player_two_name,score:percentage});
+	}
 	return html;
 }
 

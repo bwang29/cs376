@@ -1,0 +1,47 @@
+<html>
+<head>
+  <link href='http://fonts.googleapis.com/css?family=Titillium+ Web|Noto+Sans|Noto+Serif|Roboto+Condensed' rel='stylesheet' type='text/css'>
+  <script src="js/jquery-1.9.0.min.js"></script>
+  <script src="js/best_songs.js"></script> 
+  <script src="js/color-0.4.1.min.js"></script>
+  <script src="analysis.js"></script>
+</head>
+<body>
+  <script>
+    var total_room_created = 0;
+    var total_game_started = 0;
+    var total_song_pairs = 0;
+    var song_key_map = {};
+
+    for(var i=0;i< best_songs.length; i++){
+      song_key_map[best_songs[i]] = {cprs:[]};
+    }
+
+    for(var key in data.rooms){
+      console.log(key);
+      total_room_created += 1;
+      if(data.rooms[key].game_started){
+        total_game_started += 1;
+      }
+      for(var i=0; i<=5 ;i++){
+        analyze_song_pairs(key,i);
+      }
+    }
+
+    function analyze_song_pairs(k,r){
+      if(data.rooms[k][r]){
+        total_song_pairs += 1;
+        console.log("played "+r+" round(s)");
+        $("body").append(data.rooms[k][r].t + " - " + data.rooms[k][r].a+"<br/>");
+        for(song in song_key_map){
+          if(song.indexOf(data.rooms[k][r].t) != -1 && song.indexOf(data.rooms[k][r].a) != -1){
+            song_key_map[song].cprs.push(data.rooms[k][r]);
+          }
+        }
+      }
+    }
+
+  </script>
+ 
+</body>
+</html>

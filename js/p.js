@@ -336,8 +336,8 @@ function play_mood_energy(mood,energy){
 		get_youtube_videos(current_song_attempt);
 	}else{
 		var song_to_play = best_songs[Math.floor(Math.random()*best_songs.length)];
-		current_song_attempt_t = song_to_play.split(" ")[0];
-		current_song_attempt_a = song_to_play.split(" ")[1];
+		current_song_attempt_t = song_to_play.split("  ")[0];
+		current_song_attempt_a = song_to_play.split("  ")[1];
 		current_song_attempt = song_to_play;
 		st("about to play : " + current_song_attempt,0);
 		get_youtube_videos(current_song_attempt);
@@ -454,7 +454,7 @@ function generate_result_vis(obj){
 		}
 	}
 	var percentage = (score_total/total_songs_to_play).toFixed(0);
-	html+="<div style='font-size:25px'>"+obj.player_one_name + " and " + obj.player_two_name + " have a similar score of </div><span style='font-size:100px'>"+percentage+"%</span>";
+	html+="<div style='font-size:25px'>"+obj.player_one_name + " and " + obj.player_two_name + " have a similarity score of </div><span style='font-size:100px'>"+percentage+"%</span>";
 	var picture = "";
 	if(percentage > 80){
 		picture = "80.jpg";

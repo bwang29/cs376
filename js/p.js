@@ -104,9 +104,14 @@ $(function(){
 	leader_board_data_stream_limited = leader_board_data_stream.limit(20);
 	leader_board_data_stream_limited.on('value',function(snapshot){
 		var leaders = snapshot.val();
+		var leaders_array = [];
 		var html = "";
 		for(key in leaders){
-			html+=leaders[key].one +" and "+leaders[key].two+" - "+leaders[key].score + "% <br/>"
+		    leaders_array.push(leaders[key]);
+		}
+		leaders_array.sort(function(a,b){return parseInt(b.score) - parseInt(a.score)});
+		for(var i=0; i<leaders_array.length;i++){
+			html+=leaders_array[i].one +" and "+leaders_array[i].two+" - "+leaders_array[i].score + "% <br/>"
 		}
 		$("#leader_board").html(html);
 	});

@@ -5,6 +5,14 @@
   <script src="js/best_songs.js"></script> 
   <script src="js/color-0.4.1.min.js"></script>
   <script src="analysis.js"></script>
+  <style type="text/css">
+  .little{
+    display: inline-block;
+    border-left: 1px solid #fff;
+    width: 10px;
+    height: 10px;
+  }
+  </style>
 </head>
 <body>
   <script>
@@ -18,7 +26,7 @@
     }
 
     for(var key in data.rooms){
-      console.log(key);
+      //console.log(key);
       total_room_created += 1;
       if(data.rooms[key].game_started){
         total_game_started += 1;
@@ -28,11 +36,13 @@
       }
     }
 
+    print_song_color();
+
     function analyze_song_pairs(k,r){
       if(data.rooms[k][r]){
         total_song_pairs += 1;
-        console.log("played "+r+" round(s)");
-        $("body").append(data.rooms[k][r].t + " - " + data.rooms[k][r].a+"<br/>");
+        //console.log("played "+r+" round(s)");
+        //$("body").append(data.rooms[k][r].t + " - " + data.rooms[k][r].a+"<br/>");
         for(song in song_key_map){
           if(song.indexOf(data.rooms[k][r].t) != -1 && song.indexOf(data.rooms[k][r].a) != -1){
             song_key_map[song].cprs.push(data.rooms[k][r]);
@@ -40,6 +50,20 @@
         }
       }
     }
+
+    function print_song_color(){
+      for(key in song_key_map){
+        $("body").append(key+"<br/>");
+        for(var i=0; i< song_key_map[key].cprs.length; i++){
+          $("body").append("<div class='little' style='background:"+song_key_map[key].cprs[i][1]+"'></div>");
+          $("body").append("<div class='little' style='background:"+song_key_map[key].cprs[i][2]+"'></div>");
+
+        }
+        $("body").append("<br/><br/>");
+      }
+    }
+
+
 
   </script>
  

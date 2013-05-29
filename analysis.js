@@ -1040,6 +1040,70 @@ var data = {
     "-IvT60gfnEL2HxDdamuX" : {
       "player_one_name" : "yuzhai"
     },
+    "-Ivhfn17etOArv1zh6E4" : {
+      "5" : {
+        "a" : "Leona Lewis",
+        "1" : "#c82378",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.6
+        },
+        "t" : "like youâ€™ll never see me again",
+        "2" : "#a5bae2"
+      },
+      "player_two_color" : "",
+      "game_started" : true,
+      "1" : {
+        "a" : "Pusha T & Kanye West",
+        "1" : "#7d2000",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.8
+        },
+        "t" : "New God Flow",
+        "2" : "#ff2400"
+      },
+      "3" : {
+        "a" : "Ray Charles",
+        "1" : "#0063b3",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.4
+        },
+        "t" : "What'd I Say",
+        "2" : "#c82378"
+      },
+      "current_song_actual" : "like youâ€™ll never see me again  Leona Lewis",
+      "current_song_id" : "jI607ndE3i4",
+      "player_one_name" : "borui",
+      "player_one_color" : "",
+      "current_song_attempt_a" : "Leona Lewis",
+      "4" : {
+        "a" : "Willie Dixon",
+        "1" : "#fffba6",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.8
+        },
+        "t" : "Spoonful",
+        "2" : "#fffb00"
+      },
+      "current_song_attempt_t" : "like youâ€™ll never see me again",
+      "disconnected" : true,
+      "2" : {
+        "a" : "Macklemore & Ryan Lewis",
+        "1" : "#ff8e00",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.4
+        },
+        "t" : "Can't Hold Us",
+        "2" : "#ff8e00"
+      },
+      "game_round" : 6,
+      "player_two_name" : "jingshu",
+      "game_finished" : true
+    },
     "-IvXwbXkXaYHjqJytQEw" : {
       "5" : {
         "a" : "T.I.",
@@ -1326,6 +1390,70 @@ var data = {
       },
       "game_round" : 6,
       "player_two_name" : "xiaoda",
+      "game_finished" : true
+    },
+    "-Ivhb2U-acEkdxrL9ppp" : {
+      "5" : {
+        "a" : "Thompson Square",
+        "1" : "#89c300",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.7
+        },
+        "t" : "If I Didn't Have You",
+        "2" : "#ff8e00"
+      },
+      "player_two_color" : "",
+      "game_started" : true,
+      "1" : {
+        "a" : "Adele",
+        "1" : "#5f20a0",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.8
+        },
+        "t" : "he wonâ€™t go",
+        "2" : "#5f20a0"
+      },
+      "3" : {
+        "a" : "Flo Rida",
+        "1" : "#ff8e00",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.7
+        },
+        "t" : "Whistle",
+        "2" : "#ff8e00"
+      },
+      "current_song_actual" : "If I Didn't Have You  Thompson Square",
+      "current_song_id" : "dNX3y4S_jKU",
+      "player_one_name" : "jessie",
+      "player_one_color" : "",
+      "current_song_attempt_a" : "Thompson Square",
+      "4" : {
+        "a" : "Eric Church",
+        "1" : "#89c300",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.4
+        },
+        "t" : "Springsteen",
+        "2" : "#00b366"
+      },
+      "current_song_attempt_t" : "If I Didn't Have You",
+      "disconnected" : true,
+      "2" : {
+        "a" : "Fun./Janelle Monae ",
+        "1" : "#fffb00",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.3
+        },
+        "t" : "We Are Young",
+        "2" : "#ff8e00"
+      },
+      "game_round" : 6,
+      "player_two_name" : "huimin",
       "game_finished" : true
     },
     "-IvTIL190cxmSY1z1OJc" : {
@@ -2059,6 +2187,70 @@ var data = {
     },
     "-IvTNo0MDGS9qfb-v98w" : {
       "player_one_name" : "yo"
+    },
+    "-IvhaO88KrfDjIAn9inb" : {
+      "5" : {
+        "a" : "Wiz Khalifa ",
+        "1" : "#ff8e00",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.4
+        },
+        "t" : "Work Hard, Play Hard",
+        "2" : "#5f20a0"
+      },
+      "player_two_color" : "",
+      "game_started" : true,
+      "1" : {
+        "a" : "Pusha T & Kanye West",
+        "1" : "#ff8e00",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.5
+        },
+        "t" : "New God Flow",
+        "2" : "#ff2400"
+      },
+      "3" : {
+        "a" : "The Temptations",
+        "1" : "#89c300",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.6
+        },
+        "t" : "My Girl",
+        "2" : "#ff8e00"
+      },
+      "current_song_actual" : "Work Hard, Play Hard  Wiz Khalifa ",
+      "current_song_id" : "TWHNr0BrNgo",
+      "player_one_name" : "borui",
+      "player_one_color" : "",
+      "current_song_attempt_a" : "Wiz Khalifa ",
+      "4" : {
+        "a" : "W.C. Handy",
+        "1" : "#fffb00",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.5
+        },
+        "t" : "Memphis Blues",
+        "2" : "#666666"
+      },
+      "current_song_attempt_t" : "Work Hard, Play Hard",
+      "disconnected" : true,
+      "2" : {
+        "a" : "Fun./Janelle Monae ",
+        "1" : "#0063b3",
+        "m" : {
+          "mood" : "angst-ridden",
+          "energy" : 0.7
+        },
+        "t" : "We Are Young",
+        "2" : "#111111"
+      },
+      "game_round" : 6,
+      "player_two_name" : "Caiyao",
+      "game_finished" : true
     },
     "-IvX4FgdtLtsjOIHwo61" : {
       "5" : {
@@ -3042,10 +3234,20 @@ var data = {
       "one" : "Q",
       "score" : "50"
     },
+    "-Ivhbqq6KodsZTCnrQ_o" : {
+      "two" : "Caiyao",
+      "one" : "borui",
+      "score" : "54"
+    },
     "-IvggQLtSRi5GM1ranj6" : {
       "two" : "pom",
       "one" : "Philip",
       "score" : "46"
+    },
+    "-IvhgxhE0m56xjVtN3Y_" : {
+      "two" : "jingshu",
+      "one" : "borui",
+      "score" : "78"
     },
     "-IvgjTC0knSI71kkCLDX" : {
       "two" : "x",
@@ -3062,15 +3264,10 @@ var data = {
       "one" : "random",
       "score" : "84"
     },
-    "-IvgsxzJvzqMG68IuMKz" : {
-      "two" : "x",
-      "one" : "T",
-      "score" : "60"
-    },
-    "-IvggMI_n9nVNUTo8RfC" : {
-      "two" : "pom",
-      "one" : "Philip",
-      "score" : "46"
+    "-IvheCa4d4zMXr44zBwe" : {
+      "two" : "huimin",
+      "one" : "jessie",
+      "score" : "84"
     },
     "-Iv_4F0EjDxfD1ZsxBd2" : {
       "two" : "ren",

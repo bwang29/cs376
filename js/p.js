@@ -351,6 +351,7 @@ function play_mood_energy(mood,energy){
 		get_youtube_videos(current_song_attempt);
 	}else{
 		var song_to_play = best_songs[Math.floor(Math.random()*best_songs.length)];
+		best_songs.remove(song_to_play);
 		current_song_attempt_t = song_to_play.split("  ")[0];
 		current_song_attempt_a = song_to_play.split("  ")[1];
 		current_song_attempt = song_to_play;
@@ -484,9 +485,11 @@ function generate_result_vis(obj){
 	}
 	html += "<div id='score_image'><img width='300px' src='image/"+picture+"'></div>";
 	html += "</div>";
-	if(is_player_one){
+	if(is_player_one && is_owner){
 		leader_board_data_stream.push({one:obj.player_one_name,two:obj.player_two_name,score:percentage});
 	}
+	$("#leader_board").show();
+	$("#leader_board_caption").show();
 	return html;
 }
 
@@ -523,3 +526,14 @@ function calculate_similarity(hex1,hex2){
 	}
 	return (similarity * 100).toFixed(0); // return percentage
 }
+
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};

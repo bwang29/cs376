@@ -22,7 +22,7 @@
     var song_key_map = {};
 
     for(var i=0;i< best_songs.length; i++){
-      song_key_map[best_songs[i]] = {cprs:[]};
+      song_key_map[best_songs[i]] = {cprs:[],color:[]};
     }
 
     for(var key in data.rooms){
@@ -57,7 +57,6 @@
         for(var i=0; i< song_key_map[key].cprs.length; i++){
           $("body").append("<div class='little' style='background:"+song_key_map[key].cprs[i][1]+"'></div>");
           $("body").append("<div class='little' style='background:"+song_key_map[key].cprs[i][2]+"'></div>");
-
         }
         $("body").append("<br/><br/>");
       }

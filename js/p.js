@@ -24,6 +24,7 @@ var game_disconnected = false;
 var disconnected_listener_atteched = false;
 var current_selected_color = false;
 var use_energy_data = false;
+var leader_board_generated = false;
 
 // patch handlebars to enable object loops
 Handlebars.registerHelper('each_obj', function(context, options) {
@@ -121,6 +122,9 @@ $(function(){
 		$("#stage_right .player_name").text(d.player_two_name);
 		// if player two does not exist and user is not owner
 
+		if(d.leader_board_generated){
+			leader_board_generated = true;
+		}
 		if(d.game_finished){
 			$("#caption").html("Game finished");
 			$("#result_vis").html(generate_result_vis(d));
@@ -485,8 +489,9 @@ function generate_result_vis(obj){
 	}
 	html += "<div id='score_image'><img width='300px' src='image/"+picture+"'></div>";
 	html += "</div>";
-	if(is_player_one && is_owner){
+	if(is_player_one && is_owner && leader_board_generated == false){
 		leader_board_data_stream.push({one:obj.player_one_name,two:obj.player_two_name,score:percentage});
+		data_current_stream.update({leader_board_generated:true});
 	}
 	$("#leader_board").show();
 	$("#leader_board_caption").show();

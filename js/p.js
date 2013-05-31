@@ -489,6 +489,9 @@ function generate_result_vis(obj){
 	}
 	html += "<div id='score_image'><img width='300px' src='image/"+picture+"'></div>";
 	html += "</div>";
+	if(leader_board_generated == false){
+		$("#survey").show();
+	}
 	if(is_player_one && is_owner && leader_board_generated == false){
 		leader_board_data_stream.push({one:obj.player_one_name,two:obj.player_two_name,score:percentage});
 		data_current_stream.update({leader_board_generated:true});

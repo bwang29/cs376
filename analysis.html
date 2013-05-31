@@ -8,9 +8,9 @@
   <style type="text/css">
   .little{
     display: inline-block;
-    border-left: 1px solid #fff;
-    width: 10px;
-    height: 10px;
+    border-left: 1px dotted #fff;
+    width: 20px;
+    height: 50px;
   }
   </style>
 </head>
@@ -20,9 +20,10 @@
     var total_game_started = 0;
     var total_song_pairs = 0;
     var song_key_map = {};
+    var song_key_array = [];
 
     for(var i=0;i< best_songs.length; i++){
-      song_key_map[best_songs[i]] = {cprs:[],color:[]};
+      song_key_map[best_songs[i]] = {cprs:[],color:[],room_count:0};
     }
 
     for(var key in data.rooms){
@@ -36,7 +37,24 @@
       }
     }
 
-    print_song_color();
+    // convert hash into an array
+    for(key in song_key_map){
+      song_key_array.push([key,song_key_map[key]]);
+    }
+    // sort array by room count
+    song_key_array.sort(function(a,b){
+      return b[1].room_count - a[1].room_count;
+    });
+    
+    // print result
+    for(var j=0; j<song_key_array.length; j++){
+        $("body").append(song_key_array[j][0]+"<br/>"); // song title
+        for(var i=0; i< song_key_array[j][1].cprs.length; i++){
+          $("body").append("<div class='little' style='background:"+song_key_array[j][1].cprs[i][1]+"'></div>");
+          $("body").append("<div class='little' style='background:"+song_key_array[j][1].cprs[i][2]+"'></div>");
+        }
+        $("body").append("<br/><br/>");
+    }
 
     function analyze_song_pairs(k,r){
       if(data.rooms[k][r]){
@@ -46,21 +64,12 @@
         for(song in song_key_map){
           if(song.indexOf(data.rooms[k][r].t) != -1 && song.indexOf(data.rooms[k][r].a) != -1){
             song_key_map[song].cprs.push(data.rooms[k][r]);
+            song_key_map[song].room_count ++;
           }
         }
       }
     }
 
-    function print_song_color(){
-      for(key in song_key_map){
-        $("body").append(key+"<br/>");
-        for(var i=0; i< song_key_map[key].cprs.length; i++){
-          $("body").append("<div class='little' style='background:"+song_key_map[key].cprs[i][1]+"'></div>");
-          $("body").append("<div class='little' style='background:"+song_key_map[key].cprs[i][2]+"'></div>");
-        }
-        $("body").append("<br/><br/>");
-      }
-    }
 
 
 

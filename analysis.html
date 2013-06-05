@@ -4,25 +4,43 @@
   <script src="js/jquery-1.9.0.min.js"></script>
   <script src="js/best_songs.js"></script> 
   <script src="js/color-0.4.1.min.js"></script>
+  <script src="js/swfobject.js"></script>
   <script src="analysis.js"></script>
+  <script src="js/webutil.js"></script>
   <style type="text/css">
   body{
     font-family: "Titillium Web";
+    margin: 0;
+    padding: 0;
+    padding-top: 30px;
+  }
+  #songs{
+    text-align: center;
   }
   .little{
+    margin-top: 5px;
     display: inline-block;
     width: 20px;
     height: 90px;
     color:white;
+    font-size: 0px;
     text-align: center;
     line-height: 90px;
   }
   .one_cell{
+    vertical-align: top;
     display: inline-block;
-    width: 160px;
-    margin: 10px;
-    padding: 10px;
+    width: 190px;
+    margin: 5px;
+    padding: 8px;
     border: 1px solid #efefef;
+    font-size: 13px;
+    transition: 0.2s;
+  }
+  .one_cell:hover{
+    background: #f0f0f0;
+    border-color: #DDD;
+    cursor: pointer;
   }
   .cell{
     display: inline-block;
@@ -31,9 +49,32 @@
     color: white;
     font-size: 40px;
   }
+  #caption{
+    width: 100%;
+    position: fixed;
+    top:0;
+    background: white;
+    padding: 8px;
+    color: black;
+    border-bottom: 1px solid #efefef;
+    text-align: center;
+  }
+  .label{
+    display: inline-block;
+    margin:2px;
+    padding: 2px 5px;
+    font-size: 13px;
+    background: #DDD;
+  }
+  #myytplayer{
+    margin-top: -400px;
+    position: fixed;
+    opacity: 0;
+  }
   </style>
 </head>
 <body>
+  <div id="ytapiplayer"></div>
   <script>
     var total_room_created = 0;
     var total_game_started = 0;
@@ -42,6 +83,34 @@
     var song_key_array = [];
     var simple_color = ["#ffa7a4","#ffd8aa","#fffba6","#d6ea98","#91e5c4","#a5bae2","#c6abdf","#e9a2cf","#f2f2f2","#ff2400","#ff8e00","#fffb00","#89c300","#00b366","#0063b3","#5f20a0","#c82378","#666666","#7d2000","#7d4700","#7c7800","#445d00","#005834","#003259","#411166","#610e3d","#111111"];
 
+    var color_mood_mapping = {"#ffa7a4":"exciting",
+    "#ffd8aa":"dramatic",
+    "#fffba6":"cheerful",
+    "#d6ea98":"soothing",
+    "#91e5c4":"whimsical",
+    "#a5bae2":"calming",
+    "#c6abdf":"elegant",
+    "#e9a2cf":"dreamy",
+    "#f2f2f2":"plain",
+    "#ff2400":"energetic",
+    "#ff8e00":"happy",
+    "#fffb00":"lively",
+    "#89c300":"mellow",
+    "#00b366":"overjoyed",
+    "#0063b3":"sad",
+    "#5f20a0":"mysterious",
+    "#c82378":"sexy",
+    "#666666":"eerie",
+    "#7d2000":"agitated",
+    "#7d4700":"ponderous",
+    "#7c7800":"heavy",
+    "#445d00":"frustrating",
+    "#005834":"depressing",
+    "#003259":"grief",
+    "#411166":"complex",
+    "#610e3d":"intense",
+    "#111111":"dark"};
+    var sl = ws.localURLParam().sl; // show label
     var simple_color_map = {};
     for(var i=0; i<simple_color.length; i++){
       simple_color_map[simple_color[i]] = {count:0};
@@ -66,15 +135,20 @@
       song_key_array.push([key,song_key_map[key]]);
     }
     // sort array by room count
+    // song_key_array.sort(function(a,b){
+    //   return b[1].room_count - a[1].room_count;
+    // });
+
+    // sort by random
     song_key_array.sort(function(a,b){
-      return b[1].room_count - a[1].room_count;
+      return 2*Math.random()-1;
     });
     
     // print result
     $(document).ready(function(){
       for(var j=0; j<song_key_array.length; j++){
+          if(song_key_array[j][1].color.length == 0) continue;
           song_key_array[j][1].color.sort(function(a,b){ return getColorSig(a)-getColorSig(b)});
-
           // create major component
           song_key_array[j][1].freq = {};
           for(var i=0; i<song_key_array[j][1].color.length;i++){
@@ -93,17 +167,14 @@
           var color_ref = freq_sortable[0];
           freq_lab_sortable = freq_sortable.slice(1);
           freq_lab_sortable.sort(function(a,b){
-            //console.log(" diffing "+color_ref.color + " and " + a.color+" :" +  lab_diff(color_ref.color,a.color));
-            //console.log(" diffing "+color_ref.color + " and " + b.color+" :" +  lab_diff(color_ref.color,b.color));
-            //console.log(" diff res: "+res);
             var res =lab_diff(color_ref.color,a.color) - lab_diff(color_ref.color,b.color);
             return res;
           })
           freq_sortable = [color_ref].concat(freq_lab_sortable);
           //print top colors
-          var html = "<div class='one_cell'>" + song_key_array[j][0].replace("  "," - ")+"<br/>";
+          var html = "<div class='one_cell' id='"+j+"'>" + song_key_array[j][0].replace("  "," - ")+"<br/>";
           var total_count = 0;
-          var top_amount = 30;
+          var top_amount = 9999;
           var color_cap =36;
           for(var i=0; i< top_amount; i++){
             if(typeof freq_sortable[i] !== "undefined"){
@@ -114,16 +185,18 @@
           for(var i=0; i< top_amount; i++){
             if(typeof freq_sortable[i] !== "undefined"){
               if(lab_diff(color_ref.color,freq_sortable[i].color) >color_cap) break;
-              html+= ("<div class='little' style='width:"+ 100*freq_sortable[i].count/total_count + "%; background:"+freq_sortable[i].color+"'>" +(100*freq_sortable[i].count/song_key_array[j][1].color.length).toFixed(1)+ "% </div>");
+              if(!sl){
+                html+= ("<div class='little' style='width:"+ 100*freq_sortable[i].count/total_count + "%; background:"+freq_sortable[i].color+"'>" +(100*freq_sortable[i].count/song_key_array[j][1].color.length).toFixed(1)+ "% </div>");
+              }else{
+                html+= "<div class='label'>" +color_mood_mapping[freq_sortable[i].color]+ " </div>";
+              }
             }
           }
-
           // var html = "<div class='one_cell'>" + song_key_array[j][0].replace("  "," - ")+"<br/>";
           // for(var i=0; i< song_key_array[j][1].color.length; i++){
           //   html+= ("<div class='little' style='width:"+ 100/song_key_array[j][1].color.length + "%; background:"+song_key_array[j][1].color[i]+"'></div>");
           //   simple_color_map[song_key_array[j][1].color[i]].count ++;
           // }
-
           html+= ("</div>");
           $("#songs").append(html);
       }
@@ -131,6 +204,14 @@
         var html = "<div class='cell' style='background:"+key+"; width:"+3*simple_color_map[key].count+"px'>"+ simple_color_map[key].count + "</div>";
         $("#cells").append(html);
       }
+      setTimeout(function(){
+        $(".one_cell").click(function(){
+          $("#caption").html("searching song..");
+          current_song_attempt = song_key_array[this.id][0];
+          console.log(current_song_attempt);
+          get_youtube_videos(current_song_attempt);
+        });
+      },0);
     });
 
     function analyze_song_pairs(k,r){
@@ -237,19 +318,16 @@
       return lab;
     }
 
-    // hack
+    // hack together color diff using different stdandards
     var Lab1 = {l:0.0, a:0.0, b:0.0};
     var Lab2 = {l:0.0, a:0.0, b:0.0};
-    var DE1976 = 0.0;
-    var DECMC_11 = 0.0;
-    var DECMC_21 = 0.0;
 
 
   function DeltaE1976(){
     var delL = Lab1.l - Lab2.l;
     var dela = Lab1.a - Lab2.a;
     var delb = Lab1.b - Lab2.b;
-    DE1976 = Math.sqrt(delL * delL + dela * dela + delb * delb);
+    return Math.sqrt(delL * delL + dela * dela + delb * delb);
   }
 
   function DeltaE1994(textiles){
@@ -360,15 +438,79 @@
     var v3 = sh;
     if (L == 2.0)
     {
-      DECMC_21 = Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
+      return Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
     }
     else
     {
-      DECMC_11 = Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
+      return Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
+    }
+  }
+  function st(msg,type){
+    if(type==0){
+      console.log("[state] "+msg);
+    }else{
+      console.warn("[error] "+msg);
+    }
+  }
+  // Youtube playing facilities
+  function onYouTubePlayerReady(playerId) {
+    ytplayer = document.getElementById("myytplayer");
+    ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
+  }
+
+  var current_song_attempt = "";
+  var current_song_id;
+  var player_initiated = false;
+  var ytplayer;
+  function onytplayerStateChange(newState) {
+    // -1 loaded ->
+    // 1 started ->
+    // 2 ended -> 
+    // 0 paused ->
+     st("Player's new state: " + newState,0);
+     player_state = newState;
+     if(newState == 2){
+        
+     }else if(newState == 1){
+      $("#caption").html(current_song_attempt);
+      
+     }else if(newState == 0){
+
+     }else if(newState == -1){
+        $("#caption").html("loading music..");
+     }else if(newState == 5){
+      
+     }
+  }
+  function youtube_addkey(url){
+    return url+"&key="+"AIzaSyBmtm-NaguLZ3ylUbnEPtR_o4QIXIQVpuQ&q";
+  }
+  // this function touches any database for synchronization, used for player 1
+  function get_youtube_videos(q){
+    st("get youtube video with query : "+q, 0);
+    ws.get(youtube_addkey("https://www.googleapis.com/youtube/v3/search?maxResults=10&order=relevance&part=snippet&q="+q+"&type=video"),function(res){
+      var videos = res.items;
+      console.log(videos);
+      current_song_id = videos[0].id.videoId;
+      play_video(current_song_id);
+      for (var i =0; i < videos.length ;i++) {
+        st(videos[i].snippet.title+" "+videos[i].id.videoId,0);
+      };
+      console.log(res);
+    });
+  }
+  // this function does not touch any database for synchronization, used for player 2
+  function play_video(id){
+    if(player_initiated == false){
+      swfobject.embedSWF("http://www.youtube.com/v/"+id+"?enablejsapi=1&autoplay=1&playerapiid=ytplayer&version=3","ytapiplayer", "425", "356", "8", null, null, { allowScriptAccess: "always" }, { id: "myytplayer" });
+      player_initiated = true;
+    }else{
+      ytplayer.loadVideoById(id);
     }
   }
   </script>
-  <h1> Color labeling of 102 songs <button onclick="window.location.href=get_root_url()">Try out the game!</button></h1>
+  <!-- <h1> Color labeling of 102 songs <button onclick="window.location.href=get_root_url()">Try out the game!</button></h1> -->
+  <div id="caption"></div>
   <div id="songs"></div>
   <div id="cells" style="width:900px"></div>
 </body>

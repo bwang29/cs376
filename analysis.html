@@ -27,6 +27,14 @@
     text-align: center;
     line-height: 90px;
   }
+  .one_cell_click{
+    cursor: pointer;
+    background-size: 20px 20px;
+  }
+  .one_cell_click:hover{
+    opacity: 0.5;
+    
+  }
   .one_cell{
     vertical-align: top;
     display: inline-block;
@@ -40,7 +48,6 @@
   .one_cell:hover{
     background: #f0f0f0;
     border-color: #DDD;
-    cursor: pointer;
   }
   .cell{
     display: inline-block;
@@ -61,10 +68,11 @@
   }
   .label{
     display: inline-block;
-    margin:2px;
-    padding: 2px 5px;
+    margin:0 2px;
+    font-style:italic;
+    padding: 2px;
+    font-weight: bold;
     font-size: 13px;
-    background: #DDD;
   }
   #myytplayer{
     margin-top: -400px;
@@ -83,33 +91,34 @@
     var song_key_array = [];
     var simple_color = ["#ffa7a4","#ffd8aa","#fffba6","#d6ea98","#91e5c4","#a5bae2","#c6abdf","#e9a2cf","#f2f2f2","#ff2400","#ff8e00","#fffb00","#89c300","#00b366","#0063b3","#5f20a0","#c82378","#666666","#7d2000","#7d4700","#7c7800","#445d00","#005834","#003259","#411166","#610e3d","#111111"];
 
-    var color_mood_mapping = {"#ffa7a4":"exciting",
-    "#ffd8aa":"dramatic",
-    "#fffba6":"cheerful",
-    "#d6ea98":"soothing",
-    "#91e5c4":"whimsical",
-    "#a5bae2":"calming",
-    "#c6abdf":"elegant",
-    "#e9a2cf":"dreamy",
-    "#f2f2f2":"plain",
-    "#ff2400":"energetic",
-    "#ff8e00":"happy",
-    "#fffb00":"lively",
-    "#89c300":"mellow",
-    "#00b366":"overjoyed",
-    "#0063b3":"sad",
-    "#5f20a0":"mysterious",
-    "#c82378":"sexy",
-    "#666666":"eerie",
-    "#7d2000":"agitated",
-    "#7d4700":"ponderous",
-    "#7c7800":"heavy",
-    "#445d00":"frustrating",
-    "#005834":"depressing",
-    "#003259":"grief",
-    "#411166":"complex",
-    "#610e3d":"intense",
-    "#111111":"dark"};
+    var song_override = {"Mirrors  Justin Timberlake":"TH2tp72T13o", "Something About Us (Daft Punk Cover)  Balance and the Traveling Sounds":"M7gqHni_NpQ", "When I Was Your Man  Bruno Mars":"SjBY99XmqAU", "The Thrill Is Gone  B.B. King":"buP4ZjXjOgA", "(Kissed You) Good Night  Gloriana":"X1XtHqRgRhU", "Drunk On You  Luke Bryan":"fHjhsRW-cZw", "Starships  Nicki Minaj ":"FT7MWDoW_rc", "virtual insanity  Jamiroquai":"xxa0maWqP64", "Maybellene  Chuck Berry":"OpCHCA0N2K0", "Till I Die  Chris Brown/Big Sean/Wiz Khalifa":"lh28WXn2dLg", "Springsteen  Eric Church" : "HP2MKYGggd8", "5 O'Clock  T-Pain/Wiz Khalifa/Lily Allen" :"Sj1DR5BhOd8", "Turn Up the Music  Chris Brown":"hVoHa5pguzc", "you are the sunshine of my life  Stevie Wonder":"mL_PNNr_NgU", "Spoonful  Willie Dixon":"gOF1ROkvBbA", "Work Hard, Play Hard  Wiz Khalifa ":"nPDuGcZYneY", "jealousy  Martin Solveig ft. Lee Fields":"0zloht5d9-M", "the A team  Ed Sheeran":"X0dnp5E8FMo", "Some Nights  Fun.":"S-3CTWLhkR8", "Wagon Wheel  Darius Rucker":"BrsHGK4LT74", "I Love It  Icona Pop/Charli XCX":"l5qOTyXC9cA", "like you'll never see me again  Leona Lewis":"pPfH8TAYxVg", "Mannish Boy  Muddy Waters":"WKEWviZKDyg"}; 
+    var color_mood_mapping = {"#ffa7a4":"#exciting",
+    "#ffd8aa":"#dramatic",
+    "#fffba6":"#cheerful",
+    "#d6ea98":"#soothing",
+    "#91e5c4":"#whimsical",
+    "#a5bae2":"#calming",
+    "#c6abdf":"#elegant",
+    "#e9a2cf":"#dreamy",
+    "#f2f2f2":"#plain",
+    "#ff2400":"#energetic",
+    "#ff8e00":"#happy",
+    "#fffb00":"#lively",
+    "#89c300":"#mellow",
+    "#00b366":"#overjoyed",
+    "#0063b3":"#sad",
+    "#5f20a0":"#mysterious",
+    "#c82378":"#sexy",
+    "#666666":"#eerie",
+    "#7d2000":"#agitated",
+    "#7d4700":"#ponderous",
+    "#7c7800":"#heavy",
+    "#445d00":"#frustrating",
+    "#005834":"#depressing",
+    "#003259":"#grief",
+    "#411166":"#complex",
+    "#610e3d":"#intense",
+    "#111111":"#dark"};
     var sl = ws.localURLParam().sl; // show label
     var simple_color_map = {};
     for(var i=0; i<simple_color.length; i++){
@@ -172,7 +181,7 @@
           })
           freq_sortable = [color_ref].concat(freq_lab_sortable);
           //print top colors
-          var html = "<div class='one_cell' id='"+j+"'>" + song_key_array[j][0].replace("  "," - ")+"<br/>";
+          var html = "<div class='one_cell'><input type='checkbox'></input>" + song_key_array[j][0].replace("  "," - ")+"<br/><div class='one_cell_click' id='"+j+"'>";
           var total_count = 0;
           var top_amount = 9999;
           var color_cap =36;
@@ -197,7 +206,7 @@
           //   html+= ("<div class='little' style='width:"+ 100/song_key_array[j][1].color.length + "%; background:"+song_key_array[j][1].color[i]+"'></div>");
           //   simple_color_map[song_key_array[j][1].color[i]].count ++;
           // }
-          html+= ("</div>");
+          html+= ("</div></div>");
           $("#songs").append(html);
       }
       for(key in simple_color_map){
@@ -205,7 +214,7 @@
         $("#cells").append(html);
       }
       setTimeout(function(){
-        $(".one_cell").click(function(){
+        $(".one_cell_click").click(function(){
           $("#caption").html("searching song..");
           current_song_attempt = song_key_array[this.id][0];
           console.log(current_song_attempt);
@@ -488,16 +497,21 @@
   // this function touches any database for synchronization, used for player 1
   function get_youtube_videos(q){
     st("get youtube video with query : "+q, 0);
-    ws.get(youtube_addkey("https://www.googleapis.com/youtube/v3/search?maxResults=10&order=relevance&part=snippet&q="+q+"&type=video"),function(res){
-      var videos = res.items;
-      console.log(videos);
-      current_song_id = videos[0].id.videoId;
-      play_video(current_song_id);
-      for (var i =0; i < videos.length ;i++) {
-        st(videos[i].snippet.title+" "+videos[i].id.videoId,0);
-      };
-      console.log(res);
-    });
+    if(typeof song_override[q] !== "undefined"){
+      st("override video query, id is "+song_override[q],0);
+      play_video(song_override[q]);
+    }else{
+      ws.get(youtube_addkey("https://www.googleapis.com/youtube/v3/search?maxResults=10&order=relevance&part=snippet&q="+q+"&type=video"),function(res){
+        var videos = res.items;
+        console.log(videos);
+        current_song_id = videos[0].id.videoId;
+        play_video(current_song_id);
+        for (var i =0; i < videos.length ;i++) {
+          st(videos[i].snippet.title+" "+videos[i].id.videoId,0);
+        };
+        console.log(res);
+      });
+    }
   }
   // this function does not touch any database for synchronization, used for player 2
   function play_video(id){
